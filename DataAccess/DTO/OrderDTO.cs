@@ -1,3 +1,3 @@
 namespace DataAccess.DTO;
 
-public class OrderDTO();
+public record OrderDTO(Guid OrderId, Guid CustomerId, List<OrderItem> OrderItems);

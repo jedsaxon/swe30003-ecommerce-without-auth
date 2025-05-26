@@ -1,3 +1,3 @@
 namespace DataAccess.DTO;
 
-public record ProductDTO();
+public record ProductDTO(Guid ProductId, string Name, string ShortDescription, string LongDescription, double Price);
