@@ -9,7 +9,8 @@ namespace DataAccess.Repositories.Sqlite;
 /// </summary>
 public class SqliteDataAccess : IAsyncDisposable, IDisposable
 {
-    public SqliteConnection Sqlite { get; private set; }
+    private readonly SqliteConnection _sqlite;
+    private bool _connected = false;
 
     private static readonly string[] Tables =
     {
@@ -65,13 +66,18 @@ public class SqliteDataAccess : IAsyncDisposable, IDisposable
 
     public SqliteDataAccess(string? connectionString)
     {
-        Sqlite = new SqliteConnection(connectionString);
-        Sqlite.Open();
+        _sqlite = new SqliteConnection(connectionString);
+    }
+
+    public async Task<SqliteCommand> CreateCommand()
+    {
+        await Connect();
+        return _sqlite.CreateCommand();
     }
 
     public async Task InitTablesAsync()
     {
-        var command = Sqlite.CreateCommand();
+        var command = _sqlite.CreateCommand();
         foreach (var query in Tables)
         {
             command.CommandText = query;
@@ -79,13 +85,24 @@ public class SqliteDataAccess : IAsyncDisposable, IDisposable
         }
     }
 
+    public async Task Connect()
+    {
+        if (!_connected)
+        {
+            await _sqlite.OpenAsync();
+            _connected = true;
+        }
+    }
+
     public void Dispose()
     {
-        Sqlite.Dispose();
+        if (_connected) _sqlite.Close();
+        _sqlite.Dispose();
     }
 
     public async ValueTask DisposeAsync()
     {
-        await Sqlite.DisposeAsync();
+        if (_connected) await _sqlite.CloseAsync();
+        await _sqlite.DisposeAsync();
     }
 }
