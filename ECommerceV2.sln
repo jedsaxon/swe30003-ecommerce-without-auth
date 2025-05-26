@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApplication1", "WebAppli
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "Domain\Domain.csproj", "{B598C1EA-7BCC-49B8-949E-B1B22F28C115}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAccess", "DataAccess\DataAccess.csproj", "{56271A67-C834-49A7-8EE9-93B53C039110}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{B598C1EA-7BCC-49B8-949E-B1B22F28C115}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B598C1EA-7BCC-49B8-949E-B1B22F28C115}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B598C1EA-7BCC-49B8-949E-B1B22F28C115}.Release|Any CPU.Build.0 = Release|Any CPU
+		{56271A67-C834-49A7-8EE9-93B53C039110}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{56271A67-C834-49A7-8EE9-93B53C039110}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{56271A67-C834-49A7-8EE9-93B53C039110}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{56271A67-C834-49A7-8EE9-93B53C039110}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
