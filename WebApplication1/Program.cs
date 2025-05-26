@@ -1,7 +1,16 @@
+using DataAccess.Repositories.Sqlite;
+using WebApplication1;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
+builder.Services.AddScoped<SqliteDataAccess>(s =>
+{
+    var c = s.GetService<IConfiguration>();
+    if (c is null) throw new NullReferenceException("IConfiguration is null, cannot get connection string");
+    return new SqliteDataAccess(c.GetConnectionString("Sqlite"));
+});
 
 var app = builder.Build();
 
@@ -16,6 +25,8 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseRouting();
+
+await app.InitTables();
 
 app.UseAuthorization();
 
