@@ -11,7 +11,6 @@ public class DataAccess : IAsyncDisposable, IDisposable
         _connection = new SqliteConnection(connectionString);
     }
 
-
     public void Dispose()
     {
         _connection.Dispose();
