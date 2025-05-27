@@ -5,5 +5,22 @@
     Layout = "_Layout";
 }
 
-<h2>Products</h2>
-<p>@Model.Products.Length Products Found</p>
+<div class="d-flex justify-content-center flex-column">
+    <div class="text-center mt-4 mb-3">
+        <h2>Products</h2>
+    </div>
+    <div class="mx-auto" style="width: 50rem;">
+        @foreach (var p in Model.Products)
+        {
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">@p.Name</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">$@p.Price</h6>
+                    <p class="card-text">@p.ShortDescription</p>
+                    <a href="#" class="card-link">Buy Now</a>
+                    <a href="#" class="card-link">Add To Card</a>
+                </div>
+            </div>
+        }
+    </div>
+</div>
