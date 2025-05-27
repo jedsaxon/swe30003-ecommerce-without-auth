@@ -61,7 +61,7 @@ public class SqliteProductsRepository(SqliteDataAccess dataAccess, ILogger<Sqlit
 
         var newId = Guid.NewGuid();
 
-        command.Parameters.AddWithValue(":id", newId);
+        command.Parameters.AddWithValue(":id", newId.ToString());
         command.Parameters.AddWithValue(":name", newProduct.Name);
         command.Parameters.AddWithValue(":short_description", newProduct.ShortDescription);
         command.Parameters.AddWithValue(":long_description", newProduct.LongDescription);
@@ -94,5 +94,16 @@ public class SqliteProductsRepository(SqliteDataAccess dataAccess, ILogger<Sqlit
         command.Parameters.AddWithValue(":name", toUpdate.Name);
 
         return await command.ExecuteNonQueryAsync() == 1;
+    }
+
+    public async Task DeleteProduct(Guid productId)
+    {
+        var command = await dataAccess.CreateCommand();
+        command.CommandText = """
+                              delete from products
+                              where id = :id
+                              """;
+        command.Parameters.AddWithValue(":id", productId.ToString());
+        await command.ExecuteNonQueryAsync();
     }
 }

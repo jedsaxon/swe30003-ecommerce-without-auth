@@ -7,6 +7,20 @@
     <script type="importmap"></script>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
+
+    @if (ViewData.ContainsKey("Error"))
+    {
+        <div class="alert alert-danger mb-3">
+            @ViewData["Error"]
+        </div>
+    }
+    @if (ViewData.ContainsKey("Success"))
+    {
+        <div class="alert alert-success mb-3">
+            @ViewData["Success"]
+        </div>
+    }
+
 </head>
 <body>
 <header>
@@ -34,6 +48,33 @@
     <main role="main" class="pb-3">
         @RenderBody()
     </main>
+</div>
+<div class="toast-container position-static top-0 end-0">
+    @if (ViewData.ContainsKey("Error"))
+    {
+        <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <strong class="me-auto">Error</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body">
+                @ViewData["Error"]
+            </div>
+        </div>
+    }
+
+    @if (ViewData.ContainsKey("Success"))
+    {
+        <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <strong class="me-auto">Success</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body">
+                @ViewData["Success"]
+            </div>
+        </div>
+    }
 </div>
 
 <footer class="border-top footer text-muted">

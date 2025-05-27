@@ -62,4 +62,46 @@ public class Product
     {
         return new Product(id, name, shortDescription, longDescription, price);
     }
+
+    /// <summary>
+    /// Renames the product
+    /// </summary>
+    /// <exception cref="ArgumentException">If the length is less than 0 or greater than 256</exception>
+    public void Rename(string newName)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(newName);
+        ArgumentOutOfRangeException.ThrowIfGreaterThan(newName.Length, NAME_MAX_LENGTH);
+        Name = newName;
+    }
+
+    /// <summary>
+    /// Sets the short description
+    /// </summary>
+    /// <exception cref="ArgumentException">Throws if short description length is 0 or greater than 256</exception>
+    public void SetShortDescription(string shortDescription)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(shortDescription);
+        ArgumentOutOfRangeException.ThrowIfGreaterThan(shortDescription.Length, SHORT_DESC_MAX_LENGTH);
+        ShortDescription = shortDescription;
+    }
+
+    /// <summary>
+    /// Sets the long description
+    /// </summary>
+    /// <exception cref="ArgumentException">Throws if long description length is 0 or greater than 4096</exception>
+    public void SetLongDescription(string longDescription)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(longDescription);
+        ArgumentOutOfRangeException.ThrowIfGreaterThan(longDescription.Length, LONG_DESC_MAX_LENGTH);
+        LongDescription = longDescription;
+    }
+
+    /// <summary>
+    /// Updates the price of the product
+    /// </summary>
+    /// <exception cref="ArgumentException">Throws if price is 0 </exception>
+    public void UpdatePrice(double price)
+    {
+        ArgumentOutOfRangeException.ThrowIfLessThanOrEqual(price, 0);
+    }
 }

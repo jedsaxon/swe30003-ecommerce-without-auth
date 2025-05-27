@@ -18,4 +18,6 @@ public interface IProductRepository
     /// (Or really if a single record was updated)
     /// </summary>
     public Task<bool> UpdateProduct(ProductDTO toUpdate);
+
+    Task DeleteProduct(Guid productId);
 }
