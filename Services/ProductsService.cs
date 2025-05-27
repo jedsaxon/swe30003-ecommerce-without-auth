@@ -55,4 +55,14 @@ public class ProductsService(IProductRepository productRepository)
         return await productRepository.UpdateProduct(new ProductDTO(product.Id ?? Guid.NewGuid(), product.Name, product.ShortDescription,
             product.LongDescription, (double)product.Price));
     }
+
+    /// <returns>Whether the operation was successful</returns>
+    public async Task<bool> DeleteProduct(Guid productId)
+    {
+        var product = await FindProductById(productId);
+        if (product is null) return false;
+
+        await productRepository.DeleteProduct(productId);
+        return true;
+    }
 }

@@ -81,4 +81,24 @@ public class ProductsController(ProductsService products, ILogger<ProductsContro
 
         return View(editProduct);
     }
+
+    [HttpGet]
+    [Route("delete")]
+    public async Task<IActionResult> DeleteProduct(Guid productId)
+    {
+        if (!ModelState.IsValid)
+        {
+            ViewData["Error"] = "Unable to delete product - not found";
+            return RedirectToAction(nameof(EditProduct), productId);
+        }
+
+        if (!await products.DeleteProduct(productId))
+        {
+            ViewData["Error"] = "Unable to delete product - not found";
+            return RedirectToAction(nameof(EditProduct), productId);
+        }
+
+        ViewData["Success"] = "Product deleted successfully";
+        return RedirectToAction(nameof(GetAllProducts));
+    }
 }

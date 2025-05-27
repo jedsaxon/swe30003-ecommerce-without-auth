@@ -95,4 +95,15 @@ public class SqliteProductsRepository(SqliteDataAccess dataAccess, ILogger<Sqlit
 
         return await command.ExecuteNonQueryAsync() == 1;
     }
+
+    public async Task DeleteProduct(Guid productId)
+    {
+        var command = await dataAccess.CreateCommand();
+        command.CommandText = """
+                              delete from products
+                              where id = :id
+                              """;
+        command.Parameters.AddWithValue(":id", productId.ToString());
+        await command.ExecuteNonQueryAsync();
+    }
 }
