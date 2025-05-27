@@ -39,4 +39,45 @@ public class ProductsController(ProductsService products, ILogger<ProductsContro
 
         return RedirectToAction(nameof(GetAllProducts));
     }
+
+    [HttpGet]
+    [Route("edit")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> EditProduct(Guid productId)
+    {
+        var foundProduct = await products.FindProductById(productId);
+        if (foundProduct is null) return NotFound();
+
+        var editableProduct = new EditProductViewModel()
+        {
+            ProductId = productId,
+            Name = foundProduct.Name,
+            ShortDescription = foundProduct.ShortDescription,
+            LongDescription = foundProduct.LongDescription,
+            Price = foundProduct.Price
+        };
+        return View(editableProduct);
+    }
+
+    [HttpPut]
+    [Route("edit")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> EditProduct([FromBody] EditProductViewModel editProduct)
+    {
+        if (!ModelState.IsValid)
+        {
+            return View(editProduct);
+        }
+
+        bool result = await products.EditProduct(editProduct.ProductId, editProduct.Name, editProduct.ShortDescription,
+            editProduct.LongDescription, (double)editProduct.Price);
+
+        if (!result)
+        {
+            ViewData["Error"] = "Could not save new product details.";
+            return View(editProduct);
+        }
+
+        return View(editProduct.ProductId);
+    }
 }
