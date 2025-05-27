@@ -5,7 +5,7 @@ namespace WebApplication1.ViewModel;
 
 public class EditProductViewModel
 {
-    [Required] [HiddenInput] public Guid ProductId { get; set; } = Guid.Empty;
+    [Required] public Guid ProductId { get; set; } = Guid.Empty;
 
     [Required] [MaxLength(256)] public string Name { get; set; } = string.Empty;
 
