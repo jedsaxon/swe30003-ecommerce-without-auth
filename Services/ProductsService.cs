@@ -1,3 +1,4 @@
+using DataAccess.DTO;
 using DataAccess.Repositories;
 using Domain;
 using Microsoft.Extensions.Logging;
@@ -20,8 +21,8 @@ public class ProductsService(IProductRepository productRepository)
             .ToArray();
     }
 
-    public Task CreateProduct(string name, string shortDescription, string longDescription, double price)
+    public async Task CreateProduct(string name, string shortDescription, string longDescription, double price)
     {
-        return Task.CompletedTask;
+        await productRepository.InsertProduct(new NewProductDTO(name, shortDescription, longDescription, price));
     }
 }

@@ -5,7 +5,6 @@ using WebApplication1.ViewModel;
 
 namespace WebApplication1.Controllers;
 
-[ApiController]
 [Route("/products")]
 public class ProductsController(ProductsService products, ILogger<ProductsController> logger) : Controller
 {
