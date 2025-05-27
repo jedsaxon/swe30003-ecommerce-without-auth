@@ -81,7 +81,7 @@ public class SqliteDataAccess : IAsyncDisposable, IDisposable
 
     public async Task InitTablesAsync()
     {
-        var command = _sqlite.CreateCommand();
+        var command = await CreateCommand();
         foreach (var query in Tables)
         {
             command.CommandText = query;
