@@ -10,11 +10,7 @@
 </header>
 <form method="post">
     @Html.AntiForgeryToken()
-    <div class="form-group mb-3">
-        <label asp-for="ProductId" class="control-label"></label>
-        <input asp-for="ProductId" class="form-control" disabled readonly/>
-        <span asp-validation-for="ProductId" class="text-danger"></span>
-    </div>
+    <input type="hidden" asp-for="ProductId" />
     <div class="form-group mb-3">
         <label asp-for="Name" class="control-label"></label>
         <input asp-for="Name" class="form-control"/>
@@ -35,8 +31,20 @@
         <input asp-for="Price" class="form-control"/>
         <span asp-validation-for="Price" class="text-danger"></span>
     </div>
-    <div class="form-group">
+    <div class="form-group mb-3">
         <input type="submit" value="Save Changes" class="btn btn-primary"/>
     </div>
+    @if (ViewData.ContainsKey("Error"))
+    {
+        <div class="alert alert-danger mb-3">
+            @ViewData["Error"]
+        </div>
+    }
+    @if (ViewData.ContainsKey("Success"))
+    {
+        <div class="alert alert-success mb-3">
+            @ViewData["Success"]
+        </div>
+    }
 </form>
 

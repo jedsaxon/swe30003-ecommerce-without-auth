@@ -58,20 +58,23 @@ public class ProductsController(ProductsService products, ILogger<ProductsContro
         return View(editableProduct);
     }
 
-    [HttpPut]
+    [HttpPost]
     [Route("edit")]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> EditProduct([FromBody] EditProductViewModel editProduct)
+    public async Task<IActionResult> EditProduct([FromForm] EditProductViewModel editProduct)
     {
         if (!ModelState.IsValid)
         {
             return View(editProduct);
         }
 
-        bool result = await products.EditProduct(editProduct.ProductId, editProduct.Name, editProduct.ShortDescription,
-            editProduct.LongDescription, (double)editProduct.Price);
-
-        if (!result)
+        try
+        {
+            await products.EditProduct(editProduct.ProductId, editProduct.Name, editProduct.ShortDescription,
+                editProduct.LongDescription, (double)editProduct.Price);
+            ViewData["Success"] = "Results saved successfully.";
+        }
+        catch
         {
             ViewData["Error"] = "Could not save new product details.";
         }
