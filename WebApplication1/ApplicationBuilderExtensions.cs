@@ -21,7 +21,7 @@ public static class ApplicationBuilderExtensions
         if (currentProducts.Count == 0)
         {
             var productSeeder = new ProductSeeder(products);
-            await productSeeder.SeedProducts(100000);
+            await productSeeder.SeedProducts(100);
         }
 
         await db.InitTablesAsync();
