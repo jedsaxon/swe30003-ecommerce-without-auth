@@ -69,6 +69,10 @@ public class SqliteDataAccess : IAsyncDisposable, IDisposable
         _sqlite = new SqliteConnection(connectionString);
     }
 
+    /// <summary>
+    /// Returns a new command from the database. If the database is not open, it will connect to
+    /// it before creating the command
+    /// </summary>
     public async Task<SqliteCommand> CreateCommand()
     {
         await Connect();
