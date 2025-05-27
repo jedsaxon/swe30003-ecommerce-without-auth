@@ -42,8 +42,7 @@ public class ProductsController(ProductsService products, ILogger<ProductsContro
 
     [HttpGet]
     [Route("edit")]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> EditProduct(Guid productId)
+    public async Task<IActionResult> EditProduct([FromQuery] Guid productId)
     {
         var foundProduct = await products.FindProductById(productId);
         if (foundProduct is null) return NotFound();
@@ -75,9 +74,8 @@ public class ProductsController(ProductsService products, ILogger<ProductsContro
         if (!result)
         {
             ViewData["Error"] = "Could not save new product details.";
-            return View(editProduct);
         }
 
-        return View(editProduct.ProductId);
+        return View(editProduct);
     }
 }

@@ -17,8 +17,11 @@
                     <h5 class="card-title">@p.Name</h5>
                     <h6 class="card-subtitle mb-2 text-muted">$@p.Price</h6>
                     <p class="card-text">@p.ShortDescription</p>
-                    <a href="#" class="card-link">Buy Now</a>
-                    <a href="#" class="card-link">Add To Card</a>
+                    <div class="btn-group w-100 mb-3">
+                        <a href="#" class="btn btn-outline-success">Buy Now</a>
+                        <a href="#" class="btn btn-outline-success">Add To Card</a>
+                    </div>
+                    <a class="card-link text-warning" asp-action="EditProduct" asp-route-productId="@p.Id">Edit</a>
                 </div>
             </div>
         }
