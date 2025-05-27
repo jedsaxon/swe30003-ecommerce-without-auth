@@ -1,5 +1,6 @@
 using DataAccess.Repositories;
 using Domain;
+using Microsoft.Extensions.Logging;
 
 namespace Services;
 
@@ -17,5 +18,10 @@ public class ProductsService(IProductRepository productRepository)
                 (decimal)s.Price
             ))
             .ToArray();
+    }
+
+    public Task CreateProduct(string name, string shortDescription, string longDescription, double price)
+    {
+        return Task.CompletedTask;
     }
 }
