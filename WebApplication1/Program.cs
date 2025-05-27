@@ -1,4 +1,6 @@
+using DataAccess.Repositories;
 using DataAccess.Repositories.Sqlite;
+using Services;
 using WebApplication1;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,6 +14,8 @@ builder.Services.AddScoped<SqliteDataAccess>(s =>
     if (c is null) throw new NullReferenceException("IConfiguration is null, cannot get connection string");
     return new SqliteDataAccess(c.GetConnectionString("Sqlite"));
 });
+builder.Services.AddTransient<IProductRepository, SqliteProductsRepository>();
+builder.Services.AddTransient<ProductsService>();
 
 var app = builder.Build();
 
