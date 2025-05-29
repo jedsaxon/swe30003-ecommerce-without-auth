@@ -18,7 +18,7 @@
                     <h6 class="card-subtitle mb-2 text-muted">$@p.Price</h6>
                     <p class="card-text">@p.ShortDescription</p>
                     <div class="btn-group w-100 mb-3">
-                        <a href="#" class="btn btn-outline-primary">Buy Now</a>
+                        <a asp-action="ViewDetails" asp-route-productId="@p.Id" class="btn btn-outline-primary">View Details</a>
                         <a href="#" class="btn btn-outline-secondary">Add To Card</a>
                     </div>
                     <a class="card-link text-primary" asp-action="EditProduct" asp-route-productId="@p.Id">Edit</a>

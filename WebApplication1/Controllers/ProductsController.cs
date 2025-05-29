@@ -101,4 +101,29 @@ public class ProductsController(ProductsService products, ILogger<ProductsContro
         ViewData["Success"] = "Product deleted successfully";
         return RedirectToAction(nameof(GetAllProducts));
     }
+
+    [HttpGet]
+    [Route("{productId:guid}")]
+    public async Task<IActionResult> ViewDetails(Guid productId)
+    {
+        if (!ModelState.IsValid)
+        {
+            return NotFound();
+        }
+
+        var foundProduct = await products.FindProductById(productId);
+        if (foundProduct is null || foundProduct.Id is null)
+        {
+            return NotFound();
+        }
+
+        var vm = new ViewProductDetailsViewModel(
+            foundProduct.Id ?? Guid.Empty,
+            foundProduct.Name,
+            foundProduct.LongDescription,
+            foundProduct.ShortDescription,
+            foundProduct.Price
+        );
+        return View(vm);
+    }
 }
