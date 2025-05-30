@@ -11,4 +11,6 @@ public class CreateProductViewModel
     [Required] [MaxLength(4096)] public string LongDescription { get; set; } = string.Empty;
 
     [Required] [Range(0, double.MaxValue)] public double Price { get; set; } = 0;
+
+    [Required] public bool Listed { get; set; } = true;
 }

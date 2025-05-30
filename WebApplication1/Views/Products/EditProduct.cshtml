@@ -26,6 +26,11 @@
         <textarea asp-for="LongDescription" class="form-control"></textarea>
         <span asp-validation-for="LongDescription" class="text-danger"></span>
     </div>
+    <div class="form-check mb-3">
+        <label asp-for="Listed" class="form-check-label"></label>
+        <input type="checkbox" asp-for="Listed" class="form-check-input"></input>
+        <span asp-validation-for="Listed" class="text-danger"></span>
+    </div>
     <div class="form-group mb-3">
         <label asp-for="Price" class="control-label"></label>
         <input asp-for="Price" class="form-control"/>

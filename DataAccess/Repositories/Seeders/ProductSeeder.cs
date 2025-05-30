@@ -12,6 +12,7 @@ public class ProductSeeder(IProductRepository products)
         productFaker.RuleFor(o => o.Price, (f, u) => f.Random.Double(0, 1000));
         productFaker.RuleFor(o => o.LongDescription, (f, u) => f.Commerce.ProductDescription());
         productFaker.RuleFor(o => o.ShortDescription, (f, u) => f.Commerce.ProductDescription());
+        productFaker.RuleFor(o => o.Listed, (f, u) => f.Random.Bool());
 
         foreach (var p in productFaker.GenerateLazy(amount))
         {

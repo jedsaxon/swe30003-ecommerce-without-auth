@@ -1,3 +1,4 @@
+using DataAccess.DTO;
 using DataAccess.Repositories;
 using DataAccess.Repositories.Seeders;
 using DataAccess.Repositories.Sqlite;
@@ -16,14 +17,14 @@ public static class ApplicationBuilderExtensions
         var products = scope.ServiceProvider.GetService<IProductRepository>();
         if (products is null) throw new NullReferenceException("You did not provide a IProductRepository service");
 
-        var currentProducts = await products.GetProducts();
+        await db.InitTablesAsync();
+
+        List<ProductDTO> currentProducts = await products.GetProducts(true);
 
         if (currentProducts.Count == 0)
         {
             var productSeeder = new ProductSeeder(products);
             await productSeeder.SeedProducts(100);
         }
-
-        await db.InitTablesAsync();
     }
 }

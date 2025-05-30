@@ -1,0 +1,26 @@
+@model ViewProductDetailsViewModel
+
+@{
+    ViewBag.Title = Model.ProductName;
+    Layout = "_Layout";
+}
+
+<div class="row row-cols-2">
+    <div class="col">
+        <h2>@Model.ProductName</h2>
+        <p>@Model.ProductShortDescription</p>
+        <p>@Model.ProductLongDescription</p>
+    </div>
+    <div class="col">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">$@Model.Price.ToString("F2")</h5>
+                <h6 class="card-subtitle mb-2 text-body-secondary">@Model.ProductId</h6>
+                <div class="w-100 btn-group-vertical">
+                    <a href="#" class="btn btn-success">Buy Now</a>
+                    <a href="#" class="btn btn-outline-secondary">Add To Cart</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
