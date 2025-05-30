@@ -55,7 +55,7 @@ public class ProductsService(IProductRepository productRepository)
         if (listed) product.Enlist();
         else product.Unlist();
 
-        return await productRepository.UpdateProduct(new ProductDTO(product.Id ?? Guid.NewGuid(), product.Name, product.ShortDescription,
+        return await productRepository.UpdateProduct(new ProductDTO((Guid)product.Id, product.Name, product.ShortDescription,
             product.LongDescription, (double)product.Price, product.Listed));
     }
 
