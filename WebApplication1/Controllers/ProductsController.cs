@@ -54,7 +54,8 @@ public class ProductsController(ProductsService products, ILogger<ProductsContro
             Name = foundProduct.Name,
             ShortDescription = foundProduct.ShortDescription,
             LongDescription = foundProduct.LongDescription,
-            Price = foundProduct.Price
+            Price = foundProduct.Price,
+            Listed = foundProduct.Listed
         };
         return View(editableProduct);
     }
@@ -71,9 +72,13 @@ public class ProductsController(ProductsService products, ILogger<ProductsContro
 
         try
         {
-            await products.EditProduct(editProduct.ProductId, editProduct.Name, editProduct.ShortDescription,
+            var result = await products.EditProduct(editProduct.ProductId, editProduct.Name, editProduct.ShortDescription,
                 editProduct.LongDescription, (double)editProduct.Price, editProduct.Listed);
-            ViewData["Success"] = "Results saved successfully.";
+
+            if (!result)
+                ViewData["Error"] = "Unable to save results";
+            else
+                ViewData["Success"] = "Results saved successfully.";
         }
         catch
         {

@@ -91,7 +91,7 @@ public class SqliteProductsRepository(SqliteDataAccess dataAccess, ILogger<Sqlit
                               set name=:name, short_description=:short_description, long_description=:long_description, price=:price, listed=:listed
                               where id=:id
                               """;
-        command.Parameters.AddWithValue(":id", toUpdate.ProductId);
+        command.Parameters.AddWithValue(":id", toUpdate.ProductId.ToString());
         command.Parameters.AddWithValue(":short_description", toUpdate.ShortDescription);
         command.Parameters.AddWithValue(":long_description", toUpdate.LongDescription);
         command.Parameters.AddWithValue(":price", toUpdate.Price);
