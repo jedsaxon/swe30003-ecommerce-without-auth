@@ -7,10 +7,10 @@ namespace Services;
 
 public class ProductsService(IProductRepository productRepository)
 {
-    public async Task<Product[]> GetAllProducts()
+    public async Task<Product[]> GetAllProducts(bool includeUnlisted = false)
     {
         return (await productRepository
-            .GetProducts())
+            .GetProducts(includeUnlisted))
             .Select(s => Product.ProductWithIdentity(
                 s.ProductId,
                 s.Name,

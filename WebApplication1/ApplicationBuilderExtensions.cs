@@ -1,3 +1,4 @@
+using DataAccess.DTO;
 using DataAccess.Repositories;
 using DataAccess.Repositories.Seeders;
 using DataAccess.Repositories.Sqlite;
@@ -18,7 +19,7 @@ public static class ApplicationBuilderExtensions
 
         await db.InitTablesAsync();
 
-        var currentProducts = await products.GetProducts();
+        List<ProductDTO> currentProducts = await products.GetProducts(true);
 
         if (currentProducts.Count == 0)
         {

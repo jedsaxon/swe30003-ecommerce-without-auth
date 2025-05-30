@@ -1,3 +1,4 @@
+using Domain;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Services;
@@ -10,7 +11,7 @@ public class ProductsController(ProductsService products, ILogger<ProductsContro
 {
     public async Task<IActionResult> GetAllProducts()
     {
-        var p = await products.GetAllProducts();
+        Product[] p = await products.GetAllProducts(true);
         return View(new ProductsViewModel(p));
     }
 

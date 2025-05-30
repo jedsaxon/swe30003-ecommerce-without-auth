@@ -5,13 +5,18 @@ namespace DataAccess.Repositories.Sqlite;
 
 public class SqliteProductsRepository(SqliteDataAccess dataAccess, ILogger<SqliteProductsRepository> logger) : IProductRepository
 {
-    public async Task<List<ProductDTO>> GetProducts()
+    public async Task<List<ProductDTO>> GetProducts(bool includeUnlisted)
     {
         var command = await dataAccess.CreateCommand();
-        command.CommandText = """
-                              select id, name, short_description, long_description, price, listed
-                              from products;
-                              """;
+
+        var commandText = """
+                          select id, name, short_description, long_description, price, listed
+                          from products
+                          """;
+        // If we don't include unlisted products, then only return those that are listed
+        // Maybe I should just rename this argument!
+        if (!includeUnlisted) commandText += " where listed = true";
+        command.CommandText = commandText;
 
         await using var reader = await command.ExecuteReaderAsync();
         var results = new List<ProductDTO>();
