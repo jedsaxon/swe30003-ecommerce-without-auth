@@ -16,6 +16,8 @@ public static class ApplicationBuilderExtensions
         var products = scope.ServiceProvider.GetService<IProductRepository>();
         if (products is null) throw new NullReferenceException("You did not provide a IProductRepository service");
 
+        await db.InitTablesAsync();
+
         var currentProducts = await products.GetProducts();
 
         if (currentProducts.Count == 0)
@@ -23,7 +25,5 @@ public static class ApplicationBuilderExtensions
             var productSeeder = new ProductSeeder(products);
             await productSeeder.SeedProducts(100);
         }
-
-        await db.InitTablesAsync();
     }
 }

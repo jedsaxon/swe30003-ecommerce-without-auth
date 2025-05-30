@@ -14,4 +14,6 @@ public class EditProductViewModel
     [Required] [MaxLength(4096)] public string LongDescription { get; set; } = string.Empty;
 
     [Required] [Range(0, double.MaxValue)] public decimal Price { get; set; } = 0;
+
+    [Required] public bool Listed { get; set; } = false;
 }

@@ -28,7 +28,8 @@ public class SqliteDataAccess : IAsyncDisposable, IDisposable
             name varchar(256) not null,
             short_description varchar(256) not null,
             long_description text not null,
-            price double not null
+            price double not null,
+            listed bool not null
         );
         """,
         """

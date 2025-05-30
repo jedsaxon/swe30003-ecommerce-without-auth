@@ -35,7 +35,8 @@ public class ProductsController(ProductsService products, ILogger<ProductsContro
             newProduct.Name,
             newProduct.ShortDescription,
             newProduct.ShortDescription,
-            newProduct.Price);
+            newProduct.Price,
+            newProduct.Listed);
 
         return RedirectToAction(nameof(GetAllProducts));
     }
@@ -71,7 +72,7 @@ public class ProductsController(ProductsService products, ILogger<ProductsContro
         try
         {
             await products.EditProduct(editProduct.ProductId, editProduct.Name, editProduct.ShortDescription,
-                editProduct.LongDescription, (double)editProduct.Price);
+                editProduct.LongDescription, (double)editProduct.Price, editProduct.Listed);
             ViewData["Success"] = "Results saved successfully.";
         }
         catch
