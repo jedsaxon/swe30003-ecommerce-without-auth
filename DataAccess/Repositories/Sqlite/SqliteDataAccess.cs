@@ -55,6 +55,7 @@ public class SqliteDataAccess : IAsyncDisposable, IDisposable
             role_id int not null,
             first_name text not null,
             last_name text not null,
+            password_hash text not null,
             email_address text not null,
             phone_number text not null
         );
