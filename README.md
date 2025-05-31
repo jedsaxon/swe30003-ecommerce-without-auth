@@ -111,6 +111,29 @@ Shortcuts Taken:
 
 ## Authentication
 
+### Setting up an Admin Account
+
+On startup, the program will **automatically** create a new administrator account using the `DefaultAdminEmail` value 
+in the `appsettings.json` file as its email address. 
+
+### How Its Automated
+
+If the database does not have a user with that email address, it will create a **new admin user** with that email address.
+It will also use a **randomly generated password** (using `Guid.NewGuid()`). It will then print out the email address and
+new password of the administrator account. 
+
+### Password Reset
+
+There is **no way to reset this account** as of now, so to reset the password, you must either delete the `app.db`
+database, or delete the account from the database using the following query.
+
+```sql
+DELETE FROM users
+WHERE email_address = :email_address;
+```
+
+### Auth in the Application Layer
+
 Authentication, and authorisation is done in the Application layer with cookies. Here is an example use of the user 
 logged in cookie that you can use in your own controllers:
 
