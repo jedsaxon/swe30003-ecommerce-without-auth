@@ -28,6 +28,14 @@ public class ProductsController(ProductsService products) : Controller
     [Route("create")]
     public IActionResult CreateProduct()
     {
+        var loggedInUser = Request.Cookies.GetLoggedInUser();
+        var userIsAdmin = loggedInUser is not null && loggedInUser.Role == Role.AdministratorRole.Id;
+            
+        if (!userIsAdmin)
+        {
+            return RedirectToAction(controllerName: "Account", actionName: "Login");
+        }
+        
         return View();
     }
 
@@ -36,6 +44,14 @@ public class ProductsController(ProductsService products) : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> CreateProduct([FromForm] CreateProductViewModel newProduct)
     {
+        var loggedInUser = Request.Cookies.GetLoggedInUser();
+        var userIsAdmin = loggedInUser is not null && loggedInUser.Role == Role.AdministratorRole.Id;
+            
+        if (!userIsAdmin)
+        {
+            return RedirectToAction(controllerName: "Account", actionName: "Login");
+        }
+        
         if (!ModelState.IsValid)
         {
             return View(newProduct);
@@ -55,6 +71,14 @@ public class ProductsController(ProductsService products) : Controller
     [Route("edit")]
     public async Task<IActionResult> EditProduct([FromQuery] Guid productId)
     {
+        var loggedInUser = Request.Cookies.GetLoggedInUser();
+        var userIsAdmin = loggedInUser is not null && loggedInUser.Role == Role.AdministratorRole.Id;
+            
+        if (!userIsAdmin)
+        {
+            return RedirectToAction(controllerName: "Account", actionName: "Login");
+        }
+        
         var foundProduct = await products.FindProductById(productId);
         if (foundProduct is null) return NotFound();
 
@@ -75,6 +99,14 @@ public class ProductsController(ProductsService products) : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> EditProduct([FromForm] EditProductViewModel editProduct)
     {
+        var loggedInUser = Request.Cookies.GetLoggedInUser();
+        var userIsAdmin = loggedInUser is not null && loggedInUser.Role == Role.AdministratorRole.Id;
+            
+        if (!userIsAdmin)
+        {
+            return RedirectToAction(controllerName: "Account", actionName: "Login");
+        }
+        
         if (!ModelState.IsValid)
         {
             return View(editProduct);
@@ -102,6 +134,14 @@ public class ProductsController(ProductsService products) : Controller
     [Route("delete")]
     public async Task<IActionResult> DeleteProduct(Guid productId)
     {
+        var loggedInUser = Request.Cookies.GetLoggedInUser();
+        var userIsAdmin = loggedInUser is not null && loggedInUser.Role == Role.AdministratorRole.Id;
+            
+        if (!userIsAdmin)
+        {
+            return RedirectToAction(controllerName: "Account", actionName: "Login");
+        }
+        
         if (!ModelState.IsValid)
         {
             ViewData["Error"] = "Unable to delete product - not found";
