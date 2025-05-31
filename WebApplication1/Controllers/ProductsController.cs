@@ -6,7 +6,7 @@ using WebApplication1.ViewModel;
 namespace WebApplication1.Controllers;
 
 [Route("/products")]
-public class ProductsController(ProductsService products, ILogger<ProductsController> logger) : Controller
+public class ProductsController(ProductsService products) : Controller
 {
     public async Task<IActionResult> GetAllProducts()
     {
