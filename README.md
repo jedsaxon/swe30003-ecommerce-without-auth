@@ -104,3 +104,52 @@ Obviously, this does mean repeating validation logic. But, because this is for t
 having duplicates is good. This can, and will introduce bugs. However, if we want one single
 source of truth with validation, C#'s model validation system cannot be used because of those
 potentially nullable objects.
+
+Shortcuts Taken:
+
+ - The application layer will use the Domain layer's `Role` class, just to simplify things
+
+## Authentication
+
+### Setting up an Admin Account
+
+On startup, the program will **automatically** create a new administrator account using the `DefaultAdminEmail` value 
+in the `appsettings.json` file as its email address. 
+
+#### How Its Automated
+
+If the database does not have a user with that email address, it will create a **new admin user** with that email address.
+It will also use a **randomly generated password** (using `Guid.NewGuid()`). It will then print out the email address and
+new password of the administrator account. 
+
+#### Password Reset
+
+There is **no way to reset this account** as of now, so to reset the password, you must either delete the `app.db`
+database, or delete the account from the database using the following query.
+
+```sql
+DELETE FROM users
+WHERE email_address = :email_address;
+```
+
+### Application Layer
+
+Authentication, and authorisation is done in the Application layer with cookies. Here is an example use of the user 
+logged in cookie that you can use in your own controllers:
+
+```csharp
+[HttpGet]
+[Route("delete")]
+public async Task<IActionResult> DeleteProduct(Guid productId)
+{
+    // GetLoggedInUser() is an extension method
+    var loggedInUser = Request.Cookies.GetLoggedInUser();
+    
+    Console.WriteLine("User is logged in: {0}", loggedInUser is not null)
+        
+    if (loggedInUser is not null) 
+    {    
+       Console.WriteLine("User Is Adiminstrator: {0}", loggedInUser.Role == Domain.Role.AdministratorRole.Id);
+    }
+}
+```
