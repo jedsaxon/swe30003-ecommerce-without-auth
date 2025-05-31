@@ -17,6 +17,7 @@ builder.Services.AddScoped<SqliteDataAccess>(s =>
 builder.Services.AddTransient<IProductRepository, SqliteProductsRepository>();
 builder.Services.AddTransient<IUserRepository, SqliteUserRepository>();
 builder.Services.AddTransient<ProductsService>();
+builder.Services.AddTransient<UserService>();
 
 var app = builder.Build();
 

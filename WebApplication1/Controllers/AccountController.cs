@@ -1,10 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
+using Services;
 using WebApplication1.ViewModel;
 
 namespace WebApplication1.Controllers;
 
 [Microsoft.AspNetCore.Components.Route("/account")]
-public class AccountController : Controller
+public class AccountController(UserService userService) : Controller
 {
     [HttpGet]
     [Route("login")]
@@ -34,13 +35,21 @@ public class AccountController : Controller
 
     [HttpPost]
     [Route("create")]
-    public IActionResult CreateAccount([FromForm] CreateAccountViewModel createAccountDetails)
+    public async Task<IActionResult> CreateAccount([FromForm] CreateAccountViewModel createAccountDetails)
     {
         if (!ModelState.IsValid)
         {
             return View(createAccountDetails);
         }
-        
+
+        await userService.CreateMemberAccount(
+            createAccountDetails.FirstName,
+            createAccountDetails.LastName,
+            createAccountDetails.Password,
+            createAccountDetails.EmailAddress,
+            createAccountDetails.PhoneNumber
+        );
+
         return RedirectToAction(nameof(Login));
     }
 }

@@ -9,6 +9,8 @@ public class User
     public string FirstName { get; private set; }
 
     public string LastName { get; private set; }
+
+    public string Password { get; private set; }
     
     public EmailAddress EmailAddress { get; private set; }
 
@@ -18,6 +20,7 @@ public class User
         Role userRole,
         string firstName,
         string lastName,
+        string password,
         EmailAddress emailAddress,
         PhoneNumber phoneNumber)
     {
@@ -25,6 +28,7 @@ public class User
         UserRole = userRole;
         FirstName = firstName;
         LastName = lastName;
+        Password = password;
         EmailAddress = emailAddress;
         PhoneNumber = phoneNumber;
     }
@@ -33,6 +37,7 @@ public class User
         Role userRole, 
         string firstName, 
         string lastName, 
+        string password,
         string emailAddress, 
         string phoneNumber)
     {
@@ -44,6 +49,8 @@ public class User
         if (string.IsNullOrWhiteSpace(lastName)) errors[nameof(LastName)] = "Last name cannot be empty";
         else if (lastName.Length > 64) errors[nameof(LastName)] = "Last name cannot be greater than 64 characters";
 
+        if (string.IsNullOrWhiteSpace(password)) errors[nameof(Password)] = "Password cannot be empty";
+
         PhoneNumber? number = null;
         DomainException.TryExecute(errors, () => number = new PhoneNumber(phoneNumber));
 
@@ -53,7 +60,7 @@ public class User
         if (errors.Count > 0)
             throw new DomainException(errors);
 
-        return new User(null, userRole, firstName, lastName, emailAddr!, number!);
+        return new User(null, userRole, firstName, lastName, password, emailAddr!, number!);
     }
 
     public static User CreateExisting(
@@ -61,10 +68,11 @@ public class User
         Role userRole,
         string firstName,
         string lastName,
+        string password,
         EmailAddress emailAddress,
         PhoneNumber phoneNumber
     )
     {
-        return new User(userId, userRole, firstName, lastName, emailAddress, phoneNumber);
+        return new User(userId, userRole, firstName, lastName, password, emailAddress, phoneNumber);
     }
 }
