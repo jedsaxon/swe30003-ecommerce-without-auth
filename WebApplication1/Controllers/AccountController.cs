@@ -1,6 +1,7 @@
 using Domain;
 using Microsoft.AspNetCore.Mvc;
 using Services;
+using Services.Responses;
 using WebApplication1.Common;
 using WebApplication1.ViewModel;
 
@@ -18,10 +19,18 @@ public class AccountController(UserService userService) : Controller
 
     [HttpPost]
     [Route("login")]
-    public IActionResult Login([FromForm] LoginViewModel loginDetails)
+    public async Task<IActionResult> Login([FromForm] LoginViewModel loginDetails)
     {
         if (!ModelState.IsValid)
         {
+            return View(loginDetails);
+        }
+
+        var response = await userService.AuthenticateUser(loginDetails.EmailAddress, loginDetails.Password);
+
+        if (response is LoginResponse.FailedLoginAttempt)
+        {
+            ModelState.AddModelError("Other", "Email or password is invalid");
             return View(loginDetails);
         }
         
@@ -44,6 +53,8 @@ public class AccountController(UserService userService) : Controller
             return View(createAccountDetails);
         }
 
+        // TODO - check for duplicate mail address
+        
         try
         {
             await userService.CreateMemberAccount(

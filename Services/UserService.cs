@@ -3,6 +3,7 @@ using System.Security.Principal;
 using DataAccess.DTO;
 using DataAccess.Repositories;
 using Domain;
+using Services.Responses;
 
 namespace Services;
 
@@ -33,5 +34,22 @@ public class UserService(IUserRepository userRepository)
             user.PhoneNumber.ToString());
         
         await userRepository.AddUser(newUserDto);
+    }
+
+    public async Task<LoginResponse> AuthenticateUser(string emailAddress, string password)
+    {
+        var foundUser = await FindUserByEmail(emailAddress);
+
+        if (foundUser is null || !BCrypt.Net.BCrypt.Verify(password, foundUser.Password))
+        {
+            return new LoginResponse.FailedLoginAttempt();
+        }
+
+        return new LoginResponse.SuccessfulLoginResponse(foundUser);
+    }
+
+    private async Task<User?> FindUserByEmail(string emailAddress)
+    {
+        throw new NotImplementedException();
     }
 }
