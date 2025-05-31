@@ -48,7 +48,7 @@ public class AccountController(UserService userService) : Controller
                 EmailAddress = success.User.EmailAddress.ToString()
             };
 
-            Response.Cookies.Append("LoggedInUser", JsonSerializer.Serialize(cookie), new CookieOptions()
+            Response.Cookies.Append("LoggedInUser", cookie.AsJson(), new CookieOptions()
             {
                 Expires = DateTimeOffset.UtcNow + TimeSpan.FromDays(1), // log user out in 1 day
             });

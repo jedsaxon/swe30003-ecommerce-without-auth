@@ -1,3 +1,5 @@
+using System.Text.Json;
+
 namespace WebApplication1.Common;
 
 /// <summary>
@@ -18,4 +20,14 @@ public class AuthCookie
     public string EmailAddress { get; init; } = string.Empty;
 
     public string PhoneNumber { get; init; } = string.Empty;
+
+    public string AsJson()
+    {
+        return JsonSerializer.Serialize(this);
+    }
+
+    public static AuthCookie? FromJson(string json)
+    {
+        return JsonSerializer.Deserialize<AuthCookie>(json);
+    }
 }
