@@ -1,0 +1,99 @@
+using DataAccess.DTO;
+
+namespace DataAccess.Repositories.Sqlite;
+
+public class SqliteUserRepository(SqliteDataAccess dataAccess) : IUserRepository
+{
+    // Get all users
+    public async Task<List<UserDTO>> GetUsers()
+    {
+        var users = new List<UserDTO>();
+
+        var command = await dataAccess.CreateCommand();
+        command.CommandText = "SELECT * FROM users";
+
+        await using var reader = await command.ExecuteReaderAsync();
+        while (await reader.ReadAsync())
+        {
+            users.Add(new UserDTO(
+                Guid.Parse(reader.GetString(reader.GetOrdinal("id"))),
+                reader.GetString(reader.GetOrdinal("role")),
+                reader.GetString(reader.GetOrdinal("first_name")),
+                reader.GetString(reader.GetOrdinal("last_name")),
+                reader.GetString(reader.GetOrdinal("email_address")),
+                reader.GetString(reader.GetOrdinal("phone_number"))
+            ));
+        }
+
+        return users;
+    }
+
+    // Get a specific user by id
+    public async Task<UserDTO?> GetUser(Guid userId)
+    {
+        var command = await dataAccess.CreateCommand();
+        command.CommandText = "SELECT * FROM users WHERE id = :id";
+        command.Parameters.AddWithValue(":id", userId.ToString());
+
+        await using var reader = await command.ExecuteReaderAsync();
+        if (await reader.ReadAsync())
+        {
+            return new UserDTO(
+                Guid.Parse(reader.GetString(reader.GetOrdinal("id"))),
+                reader.GetString(reader.GetOrdinal("role")),
+                reader.GetString(reader.GetOrdinal("first_name")),
+                reader.GetString(reader.GetOrdinal("last_name")),
+                reader.GetString(reader.GetOrdinal("email_address")),
+                reader.GetString(reader.GetOrdinal("phone_number"))
+            );
+        }
+
+        return null;
+    }
+
+    // Add a new user to the database
+    public async Task<UserDTO> AddUser(NewUserDTO newUser)
+    {
+        var newId = Guid.NewGuid();
+
+        var command = await dataAccess.CreateCommand();
+        command.CommandText = """
+                              INSERT INTO users (id, role, first_name, last_name, email_address, phone_number)
+                              VALUES (:id, :role, :first_name, :last_name, :email_address, :phone_number)
+                              """;
+
+        command.Parameters.AddWithValue(":id", newId.ToString());
+        command.Parameters.AddWithValue(":role", newUser.Role);
+        command.Parameters.AddWithValue(":first_name", newUser.FirstName);
+        command.Parameters.AddWithValue(":last_name", newUser.LastName);
+        command.Parameters.AddWithValue(":email_address", newUser.EmailAddress);
+        command.Parameters.AddWithValue(":phone_number", newUser.PhoneNumber);
+
+        await command.ExecuteNonQueryAsync();
+
+        return new UserDTO(newId, newUser.Role, newUser.FirstName, newUser.LastName, newUser.EmailAddress, newUser.PhoneNumber);
+    }
+
+    // Update an existing user
+    public async Task UpdateUser(UserDTO user)
+    {
+        var command = await dataAccess.CreateCommand();
+        command.CommandText = """
+                              UPDATE users
+                              SET role = :role,
+                                  first_name = :first_name,
+                                  last_name = :last_name,
+                                  email_address = :email_address,
+                                  phone_number = :phone_number
+                              WHERE id = :id
+                              """;
+
+        command.Parameters.AddWithValue(":id", user.Id.ToString());
+        command.Parameters.AddWithValue(":role", user.Role);
+        command.Parameters.AddWithValue(":first_name", user.FirstName);
+        command.Parameters.AddWithValue(":last_name", user.LastName);
+        command.Parameters.AddWithValue(":email_address", user.EmailAddress);
+        command.Parameters.AddWithValue(":phone_number", user.PhoneNumber);
+
+        await command.ExecuteNonQueryAsync();
+    }}

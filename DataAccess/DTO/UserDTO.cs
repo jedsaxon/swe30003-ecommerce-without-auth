@@ -6,9 +6,5 @@ public record UserDTO(
     string FirstName,
     string LastName,
     string EmailAddress,
-    string PhoneNumber,
-    string AddressStreet,
-    string AddressCity,
-    string AddressPostalCode,
-    string AddressCountry
+    string PhoneNumber
     );
