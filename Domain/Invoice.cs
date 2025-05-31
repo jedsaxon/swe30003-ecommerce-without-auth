@@ -30,7 +30,7 @@ public class Invoice
         if (order.Customer is null)
             throw new ArgumentNullException(nameof(order), "Cannot create invoice when the order does not have an assigned user.");
         
-        var invoiceUser = InvoiceUser.CreateFromUser(order.Customer);
+        var invoiceUser = InvoiceUser.CreateFromUser(order.Customer, order.ShippingAddress);
         return new Invoice(null, order, InvoiceStatus.StatusUnpaid, invoiceUser);
     }
 
