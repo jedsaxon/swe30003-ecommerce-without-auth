@@ -1,0 +1,18 @@
+@model ViewShoppingCartViewModel
+
+@{
+    ViewBag.Title = "Shopping cart";
+    Layout = "_Layout";
+}
+
+<div class="row row-cols-2">
+@{
+    foreach (var item in Model.Items)
+    {
+        <div>
+            @item.ProductName
+            @item.Count
+        </div>
+    }
+}
+</div>
