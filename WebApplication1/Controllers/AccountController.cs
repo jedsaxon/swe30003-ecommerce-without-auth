@@ -46,7 +46,9 @@ public class AccountController(UserService userService) : Controller
                          throw new Exception("User ID could not be converted to string because it was not a GUID."),
                 FirstName = success.User.FirstName,
                 LastName = success.User.LastName,
-                EmailAddress = success.User.EmailAddress.ToString()
+                EmailAddress = success.User.EmailAddress.ToString(),
+                Role = success.User.UserRole.Id,
+                PhoneNumber = success.User.PhoneNumber.ToString()
             };
 
             Response.Cookies.Append("LoggedInUser", cookie.AsJson(), new CookieOptions()

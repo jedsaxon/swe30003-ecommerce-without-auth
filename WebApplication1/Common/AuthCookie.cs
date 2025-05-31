@@ -21,6 +21,8 @@ public class AuthCookie
 
     public string PhoneNumber { get; init; } = string.Empty;
 
+    public int Role { get; init; }
+
     public string AsJson()
     {
         return JsonSerializer.Serialize(this);
