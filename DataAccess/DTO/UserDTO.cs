@@ -2,7 +2,7 @@ namespace DataAccess.DTO;
 
 public record UserDTO(
     Guid Id,
-    string Role,
+    int Role,
     string FirstName,
     string LastName,
     string EmailAddress,

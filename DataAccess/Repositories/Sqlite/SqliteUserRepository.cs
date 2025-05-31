@@ -16,12 +16,12 @@ public class SqliteUserRepository(SqliteDataAccess dataAccess) : IUserRepository
         while (await reader.ReadAsync())
         {
             users.Add(new UserDTO(
-                Guid.Parse(reader.GetString(reader.GetOrdinal("id"))),
-                reader.GetString(reader.GetOrdinal("role")),
-                reader.GetString(reader.GetOrdinal("first_name")),
-                reader.GetString(reader.GetOrdinal("last_name")),
-                reader.GetString(reader.GetOrdinal("email_address")),
-                reader.GetString(reader.GetOrdinal("phone_number"))
+                reader.GetGuid(0),
+                reader.GetInt32(1),
+                reader.GetString(2),
+                reader.GetString(3),
+                reader.GetString(4),
+                reader.GetString(5)
             ));
         }
 
@@ -39,12 +39,12 @@ public class SqliteUserRepository(SqliteDataAccess dataAccess) : IUserRepository
         if (await reader.ReadAsync())
         {
             return new UserDTO(
-                Guid.Parse(reader.GetString(reader.GetOrdinal("id"))),
-                reader.GetString(reader.GetOrdinal("role")),
-                reader.GetString(reader.GetOrdinal("first_name")),
-                reader.GetString(reader.GetOrdinal("last_name")),
-                reader.GetString(reader.GetOrdinal("email_address")),
-                reader.GetString(reader.GetOrdinal("phone_number"))
+                reader.GetGuid(0),
+                reader.GetInt32(1),
+                reader.GetString(2),
+                reader.GetString(3),
+                reader.GetString(4),
+                reader.GetString(5)
             );
         }
 
