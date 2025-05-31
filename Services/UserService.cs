@@ -59,7 +59,7 @@ public class UserService(IUserRepository userRepository)
         return new LoginResponse.SuccessfulLoginResponse(foundUser);
     }
 
-    private async Task<User?> FindUserByEmail(string emailAddress)
+    public async Task<User?> FindUserByEmail(string emailAddress)
     {
         var user = await userRepository.GetUser(emailAddress);
         if (user is null) return null;
