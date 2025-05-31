@@ -1,3 +1,6 @@
+using System.Net;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using Domain;
 using Microsoft.AspNetCore.Mvc;
 using Services;
@@ -34,7 +37,26 @@ public class AccountController(UserService userService) : Controller
             return View(loginDetails);
         }
         
-        return RedirectToAction(controllerName: "Home", actionName: "Index");
+        if (response is LoginResponse.SuccessfulLoginResponse success)
+        {
+            var cookie = new AuthCookie
+            {
+                UserId = success.User.UserId.ToString() ??
+                         throw new Exception("User ID could not be converted to string because it was not a GUID."),
+                FirstName = success.User.FirstName,
+                LastName = success.User.LastName,
+                EmailAddress = success.User.EmailAddress.ToString()
+            };
+
+            Response.Cookies.Append("LoggedInUser", JsonSerializer.Serialize(cookie), new CookieOptions()
+            {
+                Expires = DateTimeOffset.UtcNow + TimeSpan.FromDays(1), // log user out in 1 day
+            });
+
+            return RedirectToAction(controllerName: "Home", actionName: "Index");
+        }
+
+        throw new ArgumentException("Login response was not successful nor failed.");
     }
 
     [HttpGet]

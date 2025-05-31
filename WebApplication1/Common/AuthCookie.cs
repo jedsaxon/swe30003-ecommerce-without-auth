@@ -6,10 +6,12 @@ namespace WebApplication1.Common;
 /// </summary>
 public class AuthCookie
 {
-    public Guid UserId { get; init; }
+    /// <summary>
+    /// A GUID in string form
+    /// </summary>
+    public string UserId { get; init; } = string.Empty;
 
     public string FirstName { get; init; } = string.Empty;
-        
 
     public string LastName { get; init; } = string.Empty;
 
