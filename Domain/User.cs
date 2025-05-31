@@ -14,15 +14,12 @@ public class User
 
     public PhoneNumber PhoneNumber { get; private set; }
 
-    public Address Address { get; private set; }
-
     private User(Guid? userId,
         Role userRole,
         string firstName,
         string lastName,
         EmailAddress emailAddress,
-        PhoneNumber phoneNumber, 
-        Address address)
+        PhoneNumber phoneNumber)
     {
         UserId = userId;
         UserRole = userRole;
@@ -30,7 +27,6 @@ public class User
         LastName = lastName;
         EmailAddress = emailAddress;
         PhoneNumber = phoneNumber;
-        Address = address;
     }
 
     public static User CreateNewUser(
@@ -38,11 +34,7 @@ public class User
         string firstName, 
         string lastName, 
         string emailAddress, 
-        string phoneNumber,
-        string addressStreet,
-        string addressCity,
-        string addressPostalCode,
-        string addressCountry)
+        string phoneNumber)
     {
         var errors = new Dictionary<string, string>();
 
@@ -58,13 +50,10 @@ public class User
         EmailAddress? emailAddr = null;
         DomainException.TryExecute(errors, () => emailAddr = new EmailAddress(emailAddress));
 
-        Address? addr = null;
-        DomainException.TryExecute(errors, () => addr = new Address(addressStreet, addressCity, addressPostalCode, addressCountry));
-
         if (errors.Count > 0)
             throw new DomainException(errors);
 
-        return new User(null, userRole, firstName, lastName, emailAddr!, number!, addr!);
+        return new User(null, userRole, firstName, lastName, emailAddr!, number!);
     }
 
     public static User CreateExisting(
@@ -73,10 +62,9 @@ public class User
         string firstName,
         string lastName,
         EmailAddress emailAddress,
-        PhoneNumber phoneNumber,
-        Address address
+        PhoneNumber phoneNumber
     )
     {
-        return new User(null, userRole, firstName, lastName, emailAddress, phoneNumber, address);
+        return new User(userId, userRole, firstName, lastName, emailAddress, phoneNumber);
     }
 }

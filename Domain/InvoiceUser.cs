@@ -29,7 +29,7 @@ public class InvoiceUser
         MatchingUser = matchingUser;
     }
 
-    public static InvoiceUser CreateFromUser(User user)
+    public static InvoiceUser CreateFromUser(User user, Address orderAddress)
     {
         // We need no data validation, because it is assumed that the `User` class handles
         // all of it for us! No code duplication!
@@ -37,7 +37,7 @@ public class InvoiceUser
         return new InvoiceUser(
             user.PhoneNumber,
             user.EmailAddress,
-            user.Address,
+            orderAddress,
             user.LastName,
             user.FirstName,
             user
