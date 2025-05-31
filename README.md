@@ -104,3 +104,7 @@ Obviously, this does mean repeating validation logic. But, because this is for t
 having duplicates is good. This can, and will introduce bugs. However, if we want one single
 source of truth with validation, C#'s model validation system cannot be used because of those
 potentially nullable objects.
+
+Shortcuts Taken:
+
+ - The application layer will use the Domain layer's `Role` class, just to simplify things
