@@ -22,10 +22,13 @@ public class UserService(IUserRepository userRepository)
 
     private async Task CreateAccount(User user)
     {
+        var hashedPassword = BCrypt.Net.BCrypt.HashPassword(user.Password);
+        
         var newUserDto = new NewUserDTO(
             user.UserRole.Id, 
             user.FirstName, 
             user.LastName, 
+            hashedPassword,
             user.EmailAddress.ToString(), 
             user.PhoneNumber.ToString());
         
