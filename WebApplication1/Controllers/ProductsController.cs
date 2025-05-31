@@ -14,10 +14,10 @@ public class ProductsController(ProductsService products) : Controller
     {
         var userIsAdmin = false;
 
-        if (Request.Cookies.TryGetValue("LoggedInUser", out var json))
+        var loggedInUser = Request.Cookies.GetLoggedInUser();
+        if (loggedInUser is not null)
         {
-            var details = AuthCookie.FromJson(json);
-            userIsAdmin = details is not null && details.Role == Role.AdministratorRole.Id;
+            userIsAdmin = loggedInUser.Role == Role.AdministratorRole.Id;
         }
         
         Product[] p = await products.GetAllProducts(includeUnlisted: userIsAdmin);
