@@ -17,6 +17,11 @@ public class AccountController : Controller
     [Route("login")]
     public IActionResult Login([FromForm] LoginViewModel loginDetails)
     {
+        if (!ModelState.IsValid)
+        {
+            return View(loginDetails);
+        }
+        
         return RedirectToAction(controllerName: "Home", actionName: "Index");
     }
 
@@ -31,6 +36,11 @@ public class AccountController : Controller
     [Route("create")]
     public IActionResult CreateAccount([FromForm] CreateAccountViewModel createAccountDetails)
     {
+        if (!ModelState.IsValid)
+        {
+            return View(createAccountDetails);
+        }
+        
         return RedirectToAction(nameof(Login));
     }
 }
