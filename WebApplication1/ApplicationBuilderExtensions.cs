@@ -19,7 +19,7 @@ public static class ApplicationBuilderExtensions
 
         await db.InitTablesAsync();
         
-        List<ProductDTO> currentProducts = await products.GetProducts();
+        List<ProductDTO> currentProducts = await products.GetProducts(true);
 
         if (currentProducts.Count == 0)
         {
