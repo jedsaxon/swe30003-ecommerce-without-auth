@@ -5,6 +5,12 @@
     Layout = "_Layout";
 }
 
+<style scoped> 
+    .alert > ul {
+        margin: 0 !important;
+    }
+</style>
+
 <div class="text-center mb-3">
     <h2>Login</h2>
 </div>
@@ -22,5 +28,8 @@
     <div class="w-100 btn-group mb-3">
         <input type="submit" value="Login" class="btn btn-primary">
     </div>
-    <a asp-action="CreateAccount" class="link-primary">I don't have an account</a>
+    <div class="mb-3">
+        <a asp-action="CreateAccount" class="link-primary">I don't have an account</a>
+    </div>
+    <div class="alert alert-danger" asp-validation-summary="All"></div>
 </form>

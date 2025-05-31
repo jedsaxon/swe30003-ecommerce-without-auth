@@ -101,4 +101,15 @@ public class AccountController(UserService userService) : Controller
 
         return RedirectToAction(nameof(Login));
     }
+
+    [HttpGet]
+    public IActionResult ViewAccount()
+    {
+        if (!Request.Cookies.ContainsKey("LoggedInUser"))
+        {
+            return RedirectToAction("Login");
+        }
+        
+        return View();
+    }
 }
