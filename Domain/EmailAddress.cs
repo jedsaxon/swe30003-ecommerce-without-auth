@@ -20,4 +20,6 @@ public class EmailAddress
         
         Email = email;
     }
+
+    public override string ToString() => Email;
 }
