@@ -2,6 +2,7 @@ using Domain;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Services;
+using WebApplication1.Common;
 using WebApplication1.ViewModel;
 
 namespace WebApplication1.Controllers;
@@ -11,7 +12,15 @@ public class ProductsController(ProductsService products) : Controller
 {
     public async Task<IActionResult> GetAllProducts()
     {
-        Product[] p = await products.GetAllProducts(true);
+        var userIsAdmin = false;
+
+        if (Request.Cookies.TryGetValue("LoggedInUser", out var json))
+        {
+            var details = AuthCookie.FromJson(json);
+            userIsAdmin = details is not null && details.Role == Role.AdministratorRole.Id;
+        }
+        
+        Product[] p = await products.GetAllProducts(includeUnlisted: userIsAdmin);
         return View(new ProductsViewModel(p));
     }
 
