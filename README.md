@@ -108,3 +108,25 @@ potentially nullable objects.
 Shortcuts Taken:
 
  - The application layer will use the Domain layer's `Role` class, just to simplify things
+
+## Authentication
+
+Authentication, and authorisation is done in the Application layer with cookies. Here is an example use of the user 
+logged in cookie that you can use in your own controllers:
+
+```csharp
+[HttpGet]
+[Route("delete")]
+public async Task<IActionResult> DeleteProduct(Guid productId)
+{
+    // GetLoggedInUser() is an extension method
+    var loggedInUser = Request.Cookies.GetLoggedInUser();
+    
+    Console.WriteLine("User is logged in: {0}", loggedInUser is not null)
+        
+    if (loggedInUser is not null) 
+    {    
+       Console.WriteLine("User Is Adiminstrator: {0}", loggedInUser.Role == Domain.Role.AdministratorRole.Id);
+    }
+}
+```
