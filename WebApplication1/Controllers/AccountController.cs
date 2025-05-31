@@ -4,6 +4,7 @@ using System.Text.Json.Serialization;
 using Domain;
 using Microsoft.AspNetCore.Mvc;
 using Services;
+using Services.Exceptions;
 using Services.Responses;
 using WebApplication1.Common;
 using WebApplication1.ViewModel;
@@ -76,7 +77,7 @@ public class AccountController(UserService userService) : Controller
         }
 
         // TODO - check for duplicate mail address
-        
+
         try
         {
             await userService.CreateMemberAccount(
@@ -86,6 +87,11 @@ public class AccountController(UserService userService) : Controller
                 createAccountDetails.EmailAddress,
                 createAccountDetails.PhoneNumber
             );
+        }
+        catch (AccountExistsException)
+        {
+            ModelState.AddModelError("EmailAddress", "Account with this email already exists");
+            return View(createAccountDetails);
         }
         catch (DomainException e)
         {
