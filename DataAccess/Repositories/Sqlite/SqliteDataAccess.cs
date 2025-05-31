@@ -52,20 +52,17 @@ public class SqliteDataAccess : IAsyncDisposable, IDisposable
         """
         create table if not exists users(
             id text primary key not null,
-            role text not null,
+            role_id int not null,
             first_name text not null,
             last_name text not null,
+            password_hash text not null,
             email_address text not null,
-            phone_number text not null,
-            address_street text not null,
-            address_city text not null,
-            address_postal_code text not null,
-            address_country text not null
+            phone_number text not null
         );
         """,
     };
 
-    public SqliteDataAccess(string? connectionString)
+    public SqliteDataAccess(string connectionString)
     {
         _sqlite = new SqliteConnection(connectionString);
     }

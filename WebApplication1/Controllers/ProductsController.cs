@@ -2,16 +2,25 @@ using Domain;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Services;
+using WebApplication1.Common;
 using WebApplication1.ViewModel;
 
 namespace WebApplication1.Controllers;
 
 [Route("/products")]
-public class ProductsController(ProductsService products, ILogger<ProductsController> logger) : Controller
+public class ProductsController(ProductsService products) : Controller
 {
     public async Task<IActionResult> GetAllProducts()
     {
-        Product[] p = await products.GetAllProducts(true);
+        var userIsAdmin = false;
+
+        var loggedInUser = Request.Cookies.GetLoggedInUser();
+        if (loggedInUser is not null)
+        {
+            userIsAdmin = loggedInUser.Role == Role.AdministratorRole.Id;
+        }
+        
+        Product[] p = await products.GetAllProducts(includeUnlisted: userIsAdmin);
         return View(new ProductsViewModel(p));
     }
 
@@ -19,6 +28,14 @@ public class ProductsController(ProductsService products, ILogger<ProductsContro
     [Route("create")]
     public IActionResult CreateProduct()
     {
+        var loggedInUser = Request.Cookies.GetLoggedInUser();
+        var userIsAdmin = loggedInUser is not null && loggedInUser.Role == Role.AdministratorRole.Id;
+            
+        if (!userIsAdmin)
+        {
+            return RedirectToAction(controllerName: "Account", actionName: "Login");
+        }
+        
         return View();
     }
 
@@ -27,6 +44,14 @@ public class ProductsController(ProductsService products, ILogger<ProductsContro
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> CreateProduct([FromForm] CreateProductViewModel newProduct)
     {
+        var loggedInUser = Request.Cookies.GetLoggedInUser();
+        var userIsAdmin = loggedInUser is not null && loggedInUser.Role == Role.AdministratorRole.Id;
+            
+        if (!userIsAdmin)
+        {
+            return RedirectToAction(controllerName: "Account", actionName: "Login");
+        }
+        
         if (!ModelState.IsValid)
         {
             return View(newProduct);
@@ -46,6 +71,14 @@ public class ProductsController(ProductsService products, ILogger<ProductsContro
     [Route("edit")]
     public async Task<IActionResult> EditProduct([FromQuery] Guid productId)
     {
+        var loggedInUser = Request.Cookies.GetLoggedInUser();
+        var userIsAdmin = loggedInUser is not null && loggedInUser.Role == Role.AdministratorRole.Id;
+            
+        if (!userIsAdmin)
+        {
+            return RedirectToAction(controllerName: "Account", actionName: "Login");
+        }
+        
         var foundProduct = await products.FindProductById(productId);
         if (foundProduct is null) return NotFound();
 
@@ -66,6 +99,14 @@ public class ProductsController(ProductsService products, ILogger<ProductsContro
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> EditProduct([FromForm] EditProductViewModel editProduct)
     {
+        var loggedInUser = Request.Cookies.GetLoggedInUser();
+        var userIsAdmin = loggedInUser is not null && loggedInUser.Role == Role.AdministratorRole.Id;
+            
+        if (!userIsAdmin)
+        {
+            return RedirectToAction(controllerName: "Account", actionName: "Login");
+        }
+        
         if (!ModelState.IsValid)
         {
             return View(editProduct);
@@ -93,6 +134,14 @@ public class ProductsController(ProductsService products, ILogger<ProductsContro
     [Route("delete")]
     public async Task<IActionResult> DeleteProduct(Guid productId)
     {
+        var loggedInUser = Request.Cookies.GetLoggedInUser();
+        var userIsAdmin = loggedInUser is not null && loggedInUser.Role == Role.AdministratorRole.Id;
+            
+        if (!userIsAdmin)
+        {
+            return RedirectToAction(controllerName: "Account", actionName: "Login");
+        }
+        
         if (!ModelState.IsValid)
         {
             ViewData["Error"] = "Unable to delete product - not found";

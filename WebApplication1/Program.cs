@@ -12,10 +12,12 @@ builder.Services.AddScoped<SqliteDataAccess>(s =>
 {
     var c = s.GetService<IConfiguration>();
     if (c is null) throw new NullReferenceException("IConfiguration is null, cannot get connection string");
-    return new SqliteDataAccess(c.GetConnectionString("Sqlite"));
+    return new SqliteDataAccess(c.GetConnectionString("Sqlite") ?? string.Empty);
 });
 builder.Services.AddTransient<IProductRepository, SqliteProductsRepository>();
+builder.Services.AddTransient<IUserRepository, SqliteUserRepository>();
 builder.Services.AddTransient<ProductsService>();
+builder.Services.AddTransient<UserService>();
 
 var app = builder.Build();
 
@@ -32,6 +34,7 @@ app.UseHttpsRedirection();
 app.UseRouting();
 
 await app.InitTables();
+await app.InitAdminAccount();
 
 app.UseAuthorization();
 
