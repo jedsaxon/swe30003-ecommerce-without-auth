@@ -1,5 +1,7 @@
+using Domain;
 using Microsoft.AspNetCore.Mvc;
 using Services;
+using WebApplication1.Common;
 using WebApplication1.ViewModel;
 
 namespace WebApplication1.Controllers;
@@ -42,13 +44,21 @@ public class AccountController(UserService userService) : Controller
             return View(createAccountDetails);
         }
 
-        await userService.CreateMemberAccount(
-            createAccountDetails.FirstName,
-            createAccountDetails.LastName,
-            createAccountDetails.Password,
-            createAccountDetails.EmailAddress,
-            createAccountDetails.PhoneNumber
-        );
+        try
+        {
+            await userService.CreateMemberAccount(
+                createAccountDetails.FirstName,
+                createAccountDetails.LastName,
+                createAccountDetails.Password,
+                createAccountDetails.EmailAddress,
+                createAccountDetails.PhoneNumber
+            );
+        }
+        catch (DomainException e)
+        {
+            ModelState.AddDomainExceptions(e);
+            return View(createAccountDetails);
+        }
 
         return RedirectToAction(nameof(Login));
     }

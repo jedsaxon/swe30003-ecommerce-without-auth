@@ -10,7 +10,7 @@ public class EmailAddress
     
     public EmailAddress(string email)
     {
-        if (Regex.IsMatch(email, EMAIL_REGEX))
+        if (!Regex.IsMatch(email, EMAIL_REGEX))
         {
             var errs = new Dictionary<string, string>();
             errs[nameof(Email)] = "Email address invaild";
