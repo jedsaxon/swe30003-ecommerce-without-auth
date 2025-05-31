@@ -8,4 +8,6 @@ public class PhoneNumber
     {
         Value = phoneNumber;
     }
+
+    public override string ToString() => Value;
 }
