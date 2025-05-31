@@ -55,11 +55,7 @@ public class SqliteDataAccess : IAsyncDisposable, IDisposable
             first_name text not null,
             last_name text not null,
             email_address text not null,
-            phone_number text not null,
-            address_street text not null,
-            address_city text not null,
-            address_postal_code text not null,
-            address_country text not null
+            phone_number text not null
         );
         """,
     };
