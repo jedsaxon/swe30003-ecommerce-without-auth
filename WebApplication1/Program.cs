@@ -34,6 +34,7 @@ app.UseHttpsRedirection();
 app.UseRouting();
 
 await app.InitTables();
+await app.InitAdminAccount();
 
 app.UseAuthorization();
 
