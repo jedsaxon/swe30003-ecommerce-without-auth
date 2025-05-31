@@ -3,26 +3,37 @@ using System.Security.Principal;
 using DataAccess.DTO;
 using DataAccess.Repositories;
 using Domain;
+using Services.Exceptions;
 using Services.Responses;
 
 namespace Services;
 
 public class UserService(IUserRepository userRepository)
 {
+    /// <exception cref="AccountExistsException">If the account already exists</exception>
     public async Task CreateMemberAccount(string firstName, string lastName, string password, string emailAddress, string phoneNumber)
     {
         var user = User.CreateNewUser(Role.MemberRole, firstName, lastName, password, emailAddress, phoneNumber);
         await CreateAccount(user);
     }
     
+    /// <exception cref="AccountExistsException">If the account already exists</exception>
     public async Task CreateAdminAccount(string firstName, string lastName, string password, string emailAddress, string phoneNumber) 
     {
         var user = User.CreateNewUser(Role.AdministratorRole, firstName, lastName, password, emailAddress, phoneNumber);
         await CreateAccount(user);
     }
 
+    /// <exception cref="AccountExistsException">If the account already exists</exception>
     private async Task CreateAccount(User user)
     {
+        var existingUser = await FindUserByEmail(user.EmailAddress.ToString());
+
+        if (existingUser is not null)
+        {
+            throw new AccountExistsException();
+        }
+        
         var hashedPassword = BCrypt.Net.BCrypt.HashPassword(user.Password);
         
         var newUserDto = new NewUserDTO(
