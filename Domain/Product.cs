@@ -14,9 +14,10 @@ public class Product
     public string ShortDescription { get; private set; }
     public string LongDescription { get; private set; }
     public decimal Price { get; private set; }
+    public bool Listed { get; private set; }
 
     /// <exception cref="DomainException">If there were any business rules violated</exception>
-    private Product(Guid? id, string name, string shortDescription, string longDescription, decimal price)
+    private Product(Guid? id, string name, string shortDescription, string longDescription, decimal price, bool listed)
     {
         var errors = new Dictionary<string, string>();
 
@@ -35,6 +36,7 @@ public class Product
         ShortDescription = shortDescription;
         LongDescription = longDescription;
         Price = price;
+        Listed = listed;
     }
 
     /// <summary>
@@ -43,9 +45,9 @@ public class Product
     /// </summary>
     /// <returns>The newly created product with no identity</returns>
     /// <exception cref="DomainException">If there were any business rules violated</exception>
-    public static Product NewProduct(string name, string shortDescription, string longDescription, decimal price)
+    public static Product NewProduct(string name, string shortDescription, string longDescription, decimal price, bool listed)
     {
-        return new Product(null, name, shortDescription, longDescription, price);
+        return new Product(null, name, shortDescription, longDescription, price, listed);
     }
 
     /// <summary>
@@ -58,9 +60,10 @@ public class Product
         string name,
         string shortDescription,
         string longDescription,
-        decimal price)
+        decimal price,
+        bool listed)
     {
-        return new Product(id, name, shortDescription, longDescription, price);
+        return new Product(id, name, shortDescription, longDescription, price, listed);
     }
 
     /// <summary>
@@ -103,5 +106,15 @@ public class Product
     public void UpdatePrice(double price)
     {
         ArgumentOutOfRangeException.ThrowIfLessThanOrEqual(price, 0);
+    }
+
+    public void Enlist()
+    {
+        Listed = true;
+    }
+
+    public void Unlist()
+    {
+        Listed = false;
     }
 }

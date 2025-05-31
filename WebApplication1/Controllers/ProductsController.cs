@@ -1,3 +1,4 @@
+using Domain;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Services;
@@ -10,7 +11,7 @@ public class ProductsController(ProductsService products) : Controller
 {
     public async Task<IActionResult> GetAllProducts()
     {
-        var p = await products.GetAllProducts();
+        Product[] p = await products.GetAllProducts(true);
         return View(new ProductsViewModel(p));
     }
 
@@ -35,7 +36,8 @@ public class ProductsController(ProductsService products) : Controller
             newProduct.Name,
             newProduct.ShortDescription,
             newProduct.ShortDescription,
-            newProduct.Price);
+            newProduct.Price,
+            newProduct.Listed);
 
         return RedirectToAction(nameof(GetAllProducts));
     }
@@ -53,7 +55,8 @@ public class ProductsController(ProductsService products) : Controller
             Name = foundProduct.Name,
             ShortDescription = foundProduct.ShortDescription,
             LongDescription = foundProduct.LongDescription,
-            Price = foundProduct.Price
+            Price = foundProduct.Price,
+            Listed = foundProduct.Listed
         };
         return View(editableProduct);
     }
@@ -70,9 +73,13 @@ public class ProductsController(ProductsService products) : Controller
 
         try
         {
-            await products.EditProduct(editProduct.ProductId, editProduct.Name, editProduct.ShortDescription,
-                editProduct.LongDescription, (double)editProduct.Price);
-            ViewData["Success"] = "Results saved successfully.";
+            var result = await products.EditProduct(editProduct.ProductId, editProduct.Name, editProduct.ShortDescription,
+                editProduct.LongDescription, (double)editProduct.Price, editProduct.Listed);
+
+            if (!result)
+                ViewData["Error"] = "Unable to save results";
+            else
+                ViewData["Success"] = "Results saved successfully.";
         }
         catch
         {
@@ -100,5 +107,30 @@ public class ProductsController(ProductsService products) : Controller
 
         ViewData["Success"] = "Product deleted successfully";
         return RedirectToAction(nameof(GetAllProducts));
+    }
+
+    [HttpGet]
+    [Route("{productId:guid}")]
+    public async Task<IActionResult> ViewDetails(Guid productId)
+    {
+        if (!ModelState.IsValid)
+        {
+            return NotFound();
+        }
+
+        var foundProduct = await products.FindProductById(productId);
+        if (foundProduct is null || foundProduct.Id is null)
+        {
+            return NotFound();
+        }
+
+        var vm = new ViewProductDetailsViewModel(
+            foundProduct.Id ?? Guid.Empty,
+            foundProduct.Name,
+            foundProduct.LongDescription,
+            foundProduct.ShortDescription,
+            foundProduct.Price
+        );
+        return View(vm);
     }
 }

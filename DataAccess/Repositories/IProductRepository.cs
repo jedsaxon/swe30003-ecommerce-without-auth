@@ -4,7 +4,7 @@ namespace DataAccess.Repositories;
 
 public interface IProductRepository
 {
-    public Task<List<ProductDTO>> GetProducts();
+    public Task<List<ProductDTO>> GetProducts(bool includeUnlisted);
     public Task<ProductDTO?> GetById(Guid productId);
 
     /// <summary>
