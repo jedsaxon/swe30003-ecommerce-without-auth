@@ -12,7 +12,7 @@ builder.Services.AddScoped<SqliteDataAccess>(s =>
 {
     var c = s.GetService<IConfiguration>();
     if (c is null) throw new NullReferenceException("IConfiguration is null, cannot get connection string");
-    return new SqliteDataAccess(c.GetConnectionString("Sqlite"));
+    return new SqliteDataAccess(c.GetConnectionString("Sqlite") ?? string.Empty);
 });
 builder.Services.AddTransient<IProductRepository, SqliteProductsRepository>();
 builder.Services.AddTransient<ProductsService>();

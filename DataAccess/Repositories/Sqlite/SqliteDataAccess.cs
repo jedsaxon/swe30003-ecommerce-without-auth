@@ -64,7 +64,7 @@ public class SqliteDataAccess : IAsyncDisposable, IDisposable
         """,
     };
 
-    public SqliteDataAccess(string? connectionString)
+    public SqliteDataAccess(string connectionString)
     {
         _sqlite = new SqliteConnection(connectionString);
     }
