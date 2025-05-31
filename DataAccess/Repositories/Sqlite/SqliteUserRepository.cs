@@ -21,7 +21,8 @@ public class SqliteUserRepository(SqliteDataAccess dataAccess) : IUserRepository
                 reader.GetString(2),
                 reader.GetString(3),
                 reader.GetString(4),
-                reader.GetString(5)
+                reader.GetString(5),
+                reader.GetString(6)
             ));
         }
 
@@ -44,7 +45,8 @@ public class SqliteUserRepository(SqliteDataAccess dataAccess) : IUserRepository
                 reader.GetString(2),
                 reader.GetString(3),
                 reader.GetString(4),
-                reader.GetString(5)
+                reader.GetString(5),
+                reader.GetString(6)
             );
         }
 
@@ -58,20 +60,21 @@ public class SqliteUserRepository(SqliteDataAccess dataAccess) : IUserRepository
 
         var command = await dataAccess.CreateCommand();
         command.CommandText = """
-                              INSERT INTO users (id, role, first_name, last_name, email_address, phone_number)
-                              VALUES (:id, :role, :first_name, :last_name, :email_address, :phone_number)
+                              INSERT INTO users (id, role_id, first_name, last_name, password_hash, email_address, phone_number)
+                              VALUES (:id, :role, :first_name, :last_name, :password_hash, :email_address, :phone_number)
                               """;
 
         command.Parameters.AddWithValue(":id", newId.ToString());
         command.Parameters.AddWithValue(":role", newUser.Role);
         command.Parameters.AddWithValue(":first_name", newUser.FirstName);
         command.Parameters.AddWithValue(":last_name", newUser.LastName);
+        command.Parameters.AddWithValue(":password_hash", newUser.HashedPassword);
         command.Parameters.AddWithValue(":email_address", newUser.EmailAddress);
         command.Parameters.AddWithValue(":phone_number", newUser.PhoneNumber);
 
         await command.ExecuteNonQueryAsync();
 
-        return new UserDTO(newId, newUser.Role, newUser.FirstName, newUser.LastName, newUser.EmailAddress, newUser.PhoneNumber);
+        return new UserDTO(newId, newUser.Role, newUser.FirstName, newUser.LastName, newUser.HashedPassword, newUser.EmailAddress, newUser.PhoneNumber);
     }
 
     // Update an existing user
@@ -80,9 +83,10 @@ public class SqliteUserRepository(SqliteDataAccess dataAccess) : IUserRepository
         var command = await dataAccess.CreateCommand();
         command.CommandText = """
                               UPDATE users
-                              SET role = :role,
+                              SET role_id = :role,
                                   first_name = :first_name,
                                   last_name = :last_name,
+                                  password_hash = :password_hash,
                                   email_address = :email_address,
                                   phone_number = :phone_number
                               WHERE id = :id
@@ -92,6 +96,7 @@ public class SqliteUserRepository(SqliteDataAccess dataAccess) : IUserRepository
         command.Parameters.AddWithValue(":role", user.Role);
         command.Parameters.AddWithValue(":first_name", user.FirstName);
         command.Parameters.AddWithValue(":last_name", user.LastName);
+        command.Parameters.AddWithValue(":password_hash", user.PasswordHash);
         command.Parameters.AddWithValue(":email_address", user.EmailAddress);
         command.Parameters.AddWithValue(":phone_number", user.PhoneNumber);
 
