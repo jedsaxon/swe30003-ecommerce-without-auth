@@ -15,6 +15,7 @@ builder.Services.AddScoped<SqliteDataAccess>(s =>
     return new SqliteDataAccess(c.GetConnectionString("Sqlite") ?? string.Empty);
 });
 builder.Services.AddTransient<IProductRepository, SqliteProductsRepository>();
+builder.Services.AddTransient<IUserRepository, SqliteUserRepository>();
 builder.Services.AddTransient<ProductsService>();
 
 var app = builder.Build();
