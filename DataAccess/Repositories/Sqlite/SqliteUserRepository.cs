@@ -37,6 +37,37 @@ public class SqliteUserRepository(SqliteDataAccess dataAccess) : IUserRepository
         command.Parameters.AddWithValue(":id", userId.ToString());
 
         await using var reader = await command.ExecuteReaderAsync();
+
+        if (!await reader.ReadAsync())
+        {
+            return null;
+        }
+
+        return new UserDTO(
+            reader.GetGuid(0),
+            reader.GetInt32(1),
+            reader.GetString(2),
+            reader.GetString(3),
+            reader.GetString(4),
+            reader.GetString(5),
+            reader.GetString(6)
+        );
+    }
+
+    public async Task<UserDTO?> GetUser(string email)
+    {
+        var command = await dataAccess.CreateCommand();
+
+        command.CommandText = """
+                              SELECT id, role_id, first_name, last_name, password_hash, email_address, phone_number
+                              from users
+                              where email_address = :email_address
+                              limit 1 -- Just in case... probably should throw an exception instead... :)
+                              """;
+
+        command.Parameters.AddWithValue(":email_address", email);
+        await using var reader = await command.ExecuteReaderAsync();
+
         if (await reader.ReadAsync())
         {
             return new UserDTO(

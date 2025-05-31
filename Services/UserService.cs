@@ -50,6 +50,22 @@ public class UserService(IUserRepository userRepository)
 
     private async Task<User?> FindUserByEmail(string emailAddress)
     {
-        throw new NotImplementedException();
+        var user = await userRepository.GetUser(emailAddress);
+        if (user is null) return null;
+
+        var role = Role.FromId(user.Role);
+
+        if (role is null)
+            throw new ArgumentNullException($"The User {user.Id} has an invalid role ({user.Role}) which does not exist.");
+
+        return User.CreateExisting(
+            user.Id,
+            role,
+            user.FirstName,
+            user.LastName,
+            user.PasswordHash,
+            new EmailAddress(user.EmailAddress),
+            new PhoneNumber(user.PhoneNumber)
+            );
     }
 }

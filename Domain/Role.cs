@@ -13,4 +13,12 @@ public sealed class Role
         Id = id;
         Name = name;
     }
+
+    public static Role? FromId(int id)
+    {
+        if (id ==  MemberRole.Id) return MemberRole;
+        if (id == AdministratorRole.Id) return AdministratorRole;
+        
+        return null;
+    }
 }
