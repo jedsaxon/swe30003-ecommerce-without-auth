@@ -1,0 +1,59 @@
+@model ViewShoppingCartViewModel
+
+@{
+    ViewBag.Title = "Shopping Cart";
+    Layout = "_Layout";
+}
+
+<h2>Shopping Cart</h2>
+
+<!-- "Clear Cart" button -->
+<div class="mb-3">
+    <a asp-controller="ShoppingCart"
+       asp-action="Clear"
+       class="btn btn-danger">
+        Clear Cart
+    </a>
+</div>
+
+<div class="row row-cols-2 g-3">
+    @foreach (var item in Model.Items)
+    {
+        <div class="col">
+            <div class="card p-3">
+                <h5 class="card-title">@item.ProductName</h5>
+                <p class="card-text">
+                    Quantity: @item.Count
+                </p>
+                <div class="d-flex align-items-center">
+                    <!-- add button -->
+                    <a asp-controller="ShoppingCart"
+                       asp-action="Add"
+                       asp-route-productId="@item.ProductId"
+                       class="btn btn-sm btn-outline-primary me-2"
+                       title="Increase Quantity">
+                        + 
+                    </a>
+
+                    <!-- delete button -->
+                    <a asp-controller="ShoppingCart"
+                       asp-action="Delete"
+                       asp-route-productId="@item.ProductId"
+                       class="btn btn-sm btn-outline-secondary me-2"
+                       title="Decrease Quantity">
+                        - 
+                    </a>
+
+                    <!-- Remove button -->
+                    <a asp-controller="ShoppingCart"
+                       asp-action="Remove"
+                       asp-route-productId="@item.ProductId"
+                       class="btn btn-sm btn-outline-danger me-2"
+                       title="Remove Item">
+                        Remove
+                    </a>
+                </div>
+            </div>
+        </div>
+    }
+</div>
