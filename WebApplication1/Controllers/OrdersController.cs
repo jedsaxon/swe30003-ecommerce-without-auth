@@ -17,7 +17,8 @@ public class OrdersController(ProductsService products) : Controller
         {
             ProductId = x.Key,
             ProductName = x.Value.Name,
-            Count = cookie.CartIdCountDict[x.Key]
+            Count = cookie.CartIdCountDict[x.Key],
+            Price = x.Value.Price
         }).ToList();
 
         var viewModel = new PlaceOrderViewModel

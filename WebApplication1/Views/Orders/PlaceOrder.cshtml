@@ -8,11 +8,23 @@
 <div class="mb-3">
     <h2>Place Order</h2>
 </div>
+<hr/>
 <div class="row row-cols-md-1 row-cols-lg-2">
     <div class="col">
-        <p>Left</p>
+        <h3>Shopping Cart</h3>
+        @foreach (var item in Model.Items)
+        {
+            <div class="col mb-3">
+                <div class="card p-3">
+                    <h5 class="card-title">@item.ProductName</h5>
+                    <p class="card-text">Quantity: @item.Count</p>
+                    <p class="card-text">Single Price: @item.Price.ToString("F2")</p>
+                    <p class="card-text">Total Price: @((item.Price * item.Count).ToString("F2"))</p>
+                </div>
+            </div>
+        }
     </div>
     <div class="col">
-        <p>Right</p>
+        <h3>Payment Details</h3>
     </div>
 </div>

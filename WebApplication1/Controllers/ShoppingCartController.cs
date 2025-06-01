@@ -101,7 +101,8 @@ public class ShoppingCartController(ProductsService productsService) : Controlle
         {
             ProductId = x.Key,
             ProductName = x.Value.Name,
-            Count = cookie.CartIdCountDict[x.Key]
+            Count = cookie.CartIdCountDict[x.Key],
+            Price = x.Value.Price
         }).ToHashSet();
         var viewModel = new ViewShoppingCartViewModel
         {
