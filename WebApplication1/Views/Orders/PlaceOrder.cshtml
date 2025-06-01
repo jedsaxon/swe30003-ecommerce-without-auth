@@ -25,6 +25,47 @@
         }
     </div>
     <div class="col">
-        <h3>Payment Details</h3>
+        <form method="post">
+            <h3>Payment Details</h3>
+            <fieldset>
+                <h4>Addressing Information</h4>
+                <div class="form-group mb-3">
+                    <label asp-for="OrderStreet" class="form-label"></label>
+                    <input asp-for="OrderStreet" class="form-control"/>
+                    <span asp-validation-for="OrderStreet" class="text-danger"></span>
+                </div>
+                <div class="form-group mb-3">
+                    <label asp-for="OrderCity" class="form-label"></label>
+                    <input asp-for="OrderCity" class="form-control"/>
+                    <span asp-validation-for="OrderCity" class="text-danger"></span>
+                </div>
+                <div class="form-group mb-3">
+                    <label asp-for="OrderCountry" class="form-label"></label>
+                    <input asp-for="OrderCountry" class="form-control"/>
+                    <span asp-validation-for="OrderCountry" class="text-danger"></span>
+                </div>
+                <div class="form-group mb-3">
+                    <label asp-for="OrderPostalCode" class="form-label"></label>
+                    <input asp-for="OrderPostalCode" class="form-control"/>
+                    <span asp-validation-for="OrderPostalCode" class="text-danger"></span>
+                </div>
+            </fieldset>
+            <fieldset class="mb-3">
+                <h4>Payment Information</h4>
+                <div class="alert alert-secondary mb-3">Depending on your selection, you will enter your details on the next page.</div>
+                @foreach (var pp in Model.PaymentProviders)
+                {
+                    <div class="form-check">
+                        <input type="radio" id="@pp" name="SelectedGender" value="@pp" class="form-check-input"
+                               @(Model.SelectedProvider == pp ? "checked" : "")/>
+                        <label for="@pp" class="form-check-label">@pp</label>
+                    </div>
+                }
+            </fieldset>
+
+            <div class="mb-3 btn-group w-100">
+                <input type="submit" value="Continue To Payment" class="btn btn-primary w-100"/>
+            </div>
+        </form>
     </div>
 </div>
