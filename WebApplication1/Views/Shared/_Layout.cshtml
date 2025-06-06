@@ -35,27 +35,29 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="ShoppingCart" asp-action="ViewShoppingCart">
-                            <i class="fas fa-shopping-cart"></i> Cart
-                        </a>
-                    </li>
+                <ul class="navbar-nav align-items-center">
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="true">
-                            Products
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" aria-current="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Products" ? "page" : null)">
+                            <i class="fas fa-box-open me-1"></i> Products
                         </a>
                         <ul class="dropdown-menu">
                             <li>
-                                <a class="dropdown-item" asp-area="" asp-controller="Products" asp-action="GetAllProducts">Products</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="Products" asp-action="GetAllProducts">All Products</a>
                             </li>
                             <li>
                                 <a class="dropdown-item" asp-area="" asp-controller="Products" asp-action="CreateProduct">Create New Product</a>
                             </li>
                         </ul>
+                    </li>
+                    <li class="nav-item ms-2">
+                        <a class="nav-link btn btn-outline-warning px-3 py-1 d-flex align-items-center" asp-area="" asp-controller="ShoppingCart" asp-action="ViewShoppingCart" aria-current="@(ViewContext.RouteData.Values["controller"]?.ToString() == "ShoppingCart" ? "page" : null)">
+                            <i class="fas fa-shopping-cart me-2"></i> Cart
+                        </a>
+                    </li>
+                    <li class="nav-item ms-2">
+                        <a class="nav-link text-muted small" asp-area="" asp-controller="Home" asp-action="Privacy" aria-current="@(ViewContext.RouteData.Values["action"]?.ToString() == "Privacy" ? "page" : null)">
+                            <i class="fas fa-user-secret me-1"></i> Privacy
+                        </a>
                     </li>
                 </ul>
                 <ul class="navbar-nav ms-auto align-items-center">
@@ -82,7 +84,7 @@
                             <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="fas fa-user-circle fa-lg me-1"></i>
                                 <span class="fw-semibold">@loggedInUser.FirstName @loggedInUser.LastName</span>
-                                <span class="badge bg-secondary ms-2" style="font-size:0.8em;">@loggedInUser.UserId.Substring(0, 8)</span>
+                                <span class="badge bg-secondary@(loggedInUser.Role == 1 ? " admin-guid" : "")" style="font-size:0.8em;">@loggedInUser.UserId.Substring(0, 8)</span>
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                                 <li>
