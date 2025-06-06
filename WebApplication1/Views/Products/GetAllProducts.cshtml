@@ -5,42 +5,93 @@
     Layout = "_Layout";
 }
 
-<div class="d-flex justify-content-center flex-column">
-    <div class="text-center mt-4 mb-3">
-        <h2>Products</h2>
+<div class="container py-5">
+    <div class="text-center mb-5">
+        <h1 class="display-4 fw-bold">Our Products</h1>
+        <p class="lead text-muted">Discover our wide range of premium electronics</p>
     </div>
-    <div class="mx-auto" style="max-width: 50rem;">
+
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
         @foreach (var p in Model.Products)
         {
-            <div class="card mb-3 @(p.Listed ? "" : "text-bg-danger")" id="@p.Name">
-                <div class="card-body">
-                    <h5 class="card-title">@(p.Listed ? "" : "[UNLISTED] ") @p.Name</h5>
-                    <h6 class="card-subtitle mb-2 @(p.Listed ? "text-muted " : "")">$@p.Price</h6>
-                    <p class="card-text">@p.ShortDescription</p>
-                    <p class="card-text"><strong>Stock:</strong> @p.Stock</p>
-                    @if (p.Listed)
-                    {
-                        <div class="btn-group w-100 mb-3">
-                            <a asp-action="ViewDetails" asp-route-productId="@p.Id" class="btn btn-outline-primary">View Details</a>
-                            @if (p.Stock > 0)
-                            {
-                                <a asp-controller="ShoppingCart" asp-action="Add" asp-route-productId="@p.Id" class="btn btn-outline-secondary">Add To Cart</a>
-                            }
-                            else
-                            {
-                                <button class="btn btn-outline-secondary" disabled>Out of Stock</button>
-                            }
+            <div class="col">
+                <div class="card h-100 border-0 shadow-sm @(p.Listed ? "" : "text-bg-danger") product-card" id="@p.Name">
+                    <div class="position-relative">
+                        <img src="https://images.unsplash.com/photo-1498049794561-7780e7231661?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" 
+                             class="card-img-top" 
+                             alt="@p.Name"
+                             style="height: 200px; object-fit: cover;">
+                        @if (!p.Listed)
+                        {
+                            <div class="position-absolute top-0 start-0 m-2">
+                                <span class="badge bg-danger">Unlisted</span>
+                            </div>
+                        }
+                    </div>
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title fw-bold mb-2">@p.Name</h5>
+                        <h6 class="card-subtitle mb-3 @(p.Listed ? "text-muted" : "")">$@p.Price.ToString("F2")</h6>
+                        <p class="card-text flex-grow-1">@p.ShortDescription</p>
+                        <div class="d-flex align-items-center mb-3">
+                            <span class="badge @(p.Stock > 0 ? "bg-success" : "bg-danger") me-2">
+                                @(p.Stock > 0 ? "In Stock" : "Out of Stock")
+                            </span>
+                            <small class="text-muted">@p.Stock units available</small>
                         </div>
-                        <a class="card-link text-primary" asp-action="EditProduct" asp-route-productId="@p.Id">Edit</a>
-                    }
-                    else
-                    {
-                        <div class="w-100">
-                            <a class="btn btn-secondary w-100" asp-action="EditProduct" asp-route-productId="@p.Id">Edit</a>
-                        </div>
-                    }
+                        @if (p.Listed)
+                        {
+                            <div class="d-grid gap-2">
+                                <a asp-action="ViewDetails" asp-route-productId="@p.Id" 
+                                   class="btn btn-primary">
+                                    <i class="fas fa-info-circle me-2"></i>View Details
+                                </a>
+                                @if (p.Stock > 0)
+                                {
+                                    <a asp-controller="ShoppingCart" asp-action="Add" asp-route-productId="@p.Id" 
+                                       class="btn btn-outline-primary">
+                                        <i class="fas fa-shopping-cart me-2"></i>Add To Cart
+                                    </a>
+                                }
+                                else
+                                {
+                                    <button class="btn btn-outline-secondary" disabled>
+                                        <i class="fas fa-ban me-2"></i>Out of Stock
+                                    </button>
+                                }
+                            </div>
+                            <div class="mt-3 text-center">
+                                <a class="text-decoration-none" asp-action="EditProduct" asp-route-productId="@p.Id">
+                                    <i class="fas fa-edit me-1"></i>Edit
+                                </a>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="d-grid">
+                                <a class="btn btn-secondary" asp-action="EditProduct" asp-route-productId="@p.Id">
+                                    <i class="fas fa-edit me-2"></i>Edit
+                                </a>
+                            </div>
+                        }
+                    </div>
                 </div>
             </div>
         }
     </div>
 </div>
+
+<style>
+    .product-card {
+        transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    }
+    
+    .product-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 .5rem 1rem rgba(0,0,0,.15)!important;
+    }
+    
+    .card-img-top {
+        border-top-left-radius: calc(0.25rem - 1px);
+        border-top-right-radius: calc(0.25rem - 1px);
+    }
+</style>

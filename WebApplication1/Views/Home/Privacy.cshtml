@@ -1,6 +1,171 @@
 ﻿@{
     ViewData["Title"] = "Privacy Policy";
+    Layout = "_Layout";
 }
-<h1>@ViewData["Title"]</h1>
 
-<p>Use this page to detail your site's privacy policy.</p>
+<div class="container py-5">
+    <div class="text-center mb-5">
+        <h1 class="display-4 fw-bold">Privacy Policy</h1>
+        <p class="lead text-muted">Last updated: @DateTime.Now.ToString("MMMM d, yyyy")</p>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <!-- Introduction -->
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-body">
+                    <h2 class="h4 mb-3">Introduction</h2>
+                    <p class="mb-0">At AWElectronics, we take your privacy seriously. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website and use our services.</p>
+                </div>
+            </div>
+
+            <!-- Information We Collect -->
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-body">
+                    <h2 class="h4 mb-3">Information We Collect</h2>
+                    <div class="mb-3">
+                        <h3 class="h5 text-primary">Personal Information</h3>
+                        <ul class="list-unstyled ms-3">
+                            <li class="mb-2"><i class="fas fa-user text-muted me-2"></i>Name and contact information</li>
+                            <li class="mb-2"><i class="fas fa-envelope text-muted me-2"></i>Email address</li>
+                            <li class="mb-2"><i class="fas fa-phone text-muted me-2"></i>Phone number</li>
+                            <li class="mb-2"><i class="fas fa-map-marker-alt text-muted me-2"></i>Shipping and billing addresses</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="h5 text-primary">Usage Information</h3>
+                        <ul class="list-unstyled ms-3">
+                            <li class="mb-2"><i class="fas fa-shopping-cart text-muted me-2"></i>Order history and preferences</li>
+                            <li class="mb-2"><i class="fas fa-cookie text-muted me-2"></i>Browser type and device information</li>
+                            <li class="mb-2"><i class="fas fa-clock text-muted me-2"></i>Time and date of visits</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- How We Use Your Information -->
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-body">
+                    <h2 class="h4 mb-3">How We Use Your Information</h2>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-start">
+                                <i class="fas fa-shopping-bag text-primary fa-2x me-3"></i>
+                                <div>
+                                    <h3 class="h6">Order Processing</h3>
+                                    <p class="small text-muted mb-0">Process and fulfill your orders</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-start">
+                                <i class="fas fa-headset text-primary fa-2x me-3"></i>
+                                <div>
+                                    <h3 class="h6">Customer Support</h3>
+                                    <p class="small text-muted mb-0">Provide assistance and support</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-start">
+                                <i class="fas fa-bell text-primary fa-2x me-3"></i>
+                                <div>
+                                    <h3 class="h6">Communications</h3>
+                                    <p class="small text-muted mb-0">Send order updates and promotions</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-start">
+                                <i class="fas fa-chart-line text-primary fa-2x me-3"></i>
+                                <div>
+                                    <h3 class="h6">Improvements</h3>
+                                    <p class="small text-muted mb-0">Enhance our website and services</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Data Security -->
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-body">
+                    <h2 class="h4 mb-3">Data Security</h2>
+                    <div class="d-flex align-items-center mb-3">
+                        <i class="fas fa-shield-alt text-primary fa-2x me-3"></i>
+                        <p class="mb-0">We implement appropriate security measures to protect your personal information from unauthorized access, alteration, disclosure, or destruction.</p>
+                    </div>
+                    <div class="alert alert-light border">
+                        <i class="fas fa-info-circle text-primary me-2"></i>
+                        <small>We use industry-standard encryption and security protocols to ensure your data remains protected.</small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Your Rights -->
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-body">
+                    <h2 class="h4 mb-3">Your Rights</h2>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-eye text-muted me-2"></i>
+                                <span>Right to access your data</span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-edit text-muted me-2"></i>
+                                <span>Right to correct your data</span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-trash-alt text-muted me-2"></i>
+                                <span>Right to delete your data</span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-ban text-muted me-2"></i>
+                                <span>Right to object to processing</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact Us -->
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <h2 class="h4 mb-3">Contact Us</h2>
+                    <p class="mb-3">If you have any questions about this Privacy Policy, please contact us:</p>
+                    <div class="d-flex align-items-center mb-2">
+                        <i class="fas fa-envelope text-primary me-2"></i>
+                        <span>privacy@awelectronics.com</span>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-phone text-primary me-2"></i>
+                        <span>+1 (555) 123-4567</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card {
+        transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    }
+    
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 .5rem 1rem rgba(0,0,0,.15)!important;
+    }
+
+    .text-primary {
+        color: var(--primary-color) !important;
+    }
+</style>
