@@ -1,6 +1,7 @@
 namespace DataAccess.DTO;
 
 public record NewOrderDTO(
+    Guid Id,
     Guid CustomerId,
     List<NewOrderItemDto> OrderItems,
     string Street,

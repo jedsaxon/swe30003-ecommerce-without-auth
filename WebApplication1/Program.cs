@@ -21,6 +21,8 @@ builder.Services.AddTransient<ProductsService>();
 builder.Services.AddTransient<UserService>();
 builder.Services.AddTransient<ShippingService>();
 builder.Services.AddScoped<OrderService>();
+builder.Services.AddScoped<IInvoiceRepository, SqliteInvoiceRepository>();
+builder.Services.AddScoped<InvoiceService>();
 
 var app = builder.Build();
 
