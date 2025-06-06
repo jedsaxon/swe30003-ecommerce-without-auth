@@ -35,7 +35,12 @@ public class SqliteDataAccess : IAsyncDisposable, IDisposable
         """
         create table if not exists orders(
             id text primary key not null,
-            customer_id text not null
+            customer_id text not null,
+            street text,
+            city text,
+            country text,
+            post_code text,
+            payment_provider text
         );
         """,
         """
