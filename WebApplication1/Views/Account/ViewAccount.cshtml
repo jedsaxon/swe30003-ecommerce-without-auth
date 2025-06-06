@@ -1,8 +1,57 @@
+@using WebApplication1.Common
 @{
     ViewBag.Title = "Your Account";
     Layout = "_Layout";
+    var user = Context.Request.Cookies.GetLoggedInUser();
 }
 
-<h2>Your Account</h2>
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center mb-4">
+                        <i class="fas fa-user-circle fa-3x text-primary me-3"></i>
+                        <div>
+                            <h2 class="h4 mb-0">@user?.FirstName @user?.LastName</h2>
+                            <span class="badge @(user?.Role == 1 ? "bg-danger" : "bg-secondary")" style="font-size:0.9em;">@(user?.Role == 1 ? "Admin" : "Member")</span>
+                        </div>
+                    </div>
+                    <ul class="list-group list-group-flush mb-3">
+                        <li class="list-group-item px-0 d-flex align-items-center">
+                            <i class="fas fa-id-badge text-muted me-2"></i>
+                            <span class="fw-bold me-2">User ID:</span>
+                            <span class="badge bg-light text-dark">@user?.UserId?.Substring(0, 8)</span>
+                        </li>
+                        <li class="list-group-item px-0 d-flex align-items-center">
+                            <i class="fas fa-envelope text-muted me-2"></i>
+                            <span class="fw-bold me-2">Email:</span>
+                            <span>@user?.EmailAddress</span>
+                        </li>
+                        <li class="list-group-item px-0 d-flex align-items-center">
+                            <i class="fas fa-phone text-muted me-2"></i>
+                            <span class="fw-bold me-2">Phone:</span>
+                            <span>@user?.PhoneNumber</span>
+                        </li>
+                    </ul>
+                    <div class="alert alert-info mb-0">
+                        <i class="fas fa-info-circle me-2"></i>
+                        This is your account overview. For changes, please contact support.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
-<p>This page is non-functional. However, you must be logged in to access this page.</p>
+<style>
+    .card {
+        border-radius: 1rem;
+    }
+    .list-group-item {
+        background: transparent;
+        border: none;
+        padding-left: 0;
+        padding-right: 0;
+    }
+</style>
