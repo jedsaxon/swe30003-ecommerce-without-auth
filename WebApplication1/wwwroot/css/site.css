@@ -31,7 +31,7 @@ body {
 
 /* Custom AWElectronics Styles */
 :root {
-  --primary-color: #ffc107;
+  --primary-color: #0d6efd; /* Modern blue */
   --secondary-color: #212529;
   --accent-color: #dc3545;
 }
@@ -48,13 +48,13 @@ body {
 .btn-warning {
   background-color: var(--primary-color);
   border-color: var(--primary-color);
-  color: var(--secondary-color);
+  color: #fff;
 }
 
 .btn-warning:hover {
-  background-color: #e0a800;
-  border-color: #e0a800;
-  color: var(--secondary-color);
+  background-color: #0b5ed7;
+  border-color: #0b5ed7;
+  color: #fff;
 }
 
 .btn-outline-warning {
@@ -64,7 +64,7 @@ body {
 
 .btn-outline-warning:hover {
   background-color: var(--primary-color);
-  color: var(--secondary-color);
+  color: #fff;
 }
 
 .card {
@@ -175,4 +175,83 @@ body {
 
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
   text-align: start;
+}
+
+/* Navbar improvements */
+.navbar-nav .nav-link {
+  margin-right: 0.5rem;
+  transition: color 0.2s, background 0.2s;
+  display: flex;
+  align-items: center;
+}
+
+.navbar-nav .nav-link.btn {
+  margin-right: 0.5rem;
+  font-weight: 500;
+}
+
+.navbar-nav .nav-link.text-muted {
+  opacity: 0.7;
+  font-size: 0.95em;
+}
+
+.navbar-nav .nav-link.text-muted:hover,
+.navbar-nav .nav-link.text-muted:focus {
+  color: var(--primary-color) !important;
+  opacity: 1;
+}
+
+.navbar-nav .nav-link[aria-current="page"] {
+  color: var(--primary-color) !important;
+  font-weight: 600;
+}
+
+.navbar-nav .dropdown-menu {
+  min-width: 12rem;
+}
+
+@media (max-width: 991.98px) {
+  .navbar-nav .nav-link {
+    margin-right: 0;
+    margin-bottom: 0.5rem;
+  }
+}
+
+/* Cart button improvements */
+.navbar-nav .nav-link.btn.btn-outline-warning {
+  border-color: var(--primary-color) !important;
+  color: var(--primary-color) !important;
+  background: transparent;
+  transition: background 0.2s, color 0.2s, border 0.2s;
+}
+
+.navbar-nav .nav-link.btn.btn-outline-warning:hover,
+.navbar-nav .nav-link.btn.btn-outline-warning:focus,
+.navbar-nav .nav-link.btn.btn-outline-warning[aria-current="page"] {
+  background: var(--primary-color) !important;
+  color: #fff !important;
+  border-color: var(--primary-color) !important;
+}
+
+/* Active nav link distinct style */
+.navbar-nav .nav-link[aria-current="page"]:not(.btn) {
+  color: var(--primary-color) !important;
+  font-weight: 600;
+  border-bottom: 2px solid var(--primary-color);
+  background: transparent;
+}
+
+/* Fix spacing between user name and GUID badge in navbar */
+.navbar-nav .nav-link .fw-semibold {
+  margin-right: 0.3em;
+}
+
+.navbar-nav .nav-link .badge.bg-secondary {
+  margin-left: 0;
+}
+
+.admin-guid {
+  background: var(--accent-color) !important;
+  color: #fff !important;
+  border-color: var(--accent-color) !important;
 }
