@@ -16,12 +16,20 @@ public static class ApplicationBuilderExtensions
         var db = scope.ServiceProvider.GetService<SqliteDataAccess>();
         if (db is null) throw new NullReferenceException("You did not provide the SqliteDataAccess service");
 
+        await db.InitTablesAsync();
+    }
+
+    public static async Task SeedDatabase(this IApplicationBuilder builder)
+    {
+        await using var scope = builder.ApplicationServices.CreateAsyncScope();
+        
+        var db = scope.ServiceProvider.GetService<SqliteDataAccess>();
+        if (db is null) throw new NullReferenceException("You did not provide the SqliteDataAccess service");
+
         var products = scope.ServiceProvider.GetService<IProductRepository>();
         if (products is null) throw new NullReferenceException("You did not provide a IProductRepository service");
-
-        await db.InitTablesAsync();
         
-        List<ProductDTO> currentProducts = await products.GetProducts(true);
+        var currentProducts = await products.GetProducts(true);
 
         if (currentProducts.Count == 0)
         {
