@@ -27,7 +27,7 @@
 <header>
     <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
         <div class="container">
-            <a class="navbar-brand" asp-area="" asp-page="/Index">
+            <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
                 <i class="fas fa-bolt text-warning"></i> AWElectronics
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
@@ -35,10 +35,7 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                <ul class="navbar-nav flex-grow-1">
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                    </li>
+                <ul class="navbar-nav">
                     <li class="nav-item">
                         <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                     </li>
@@ -60,23 +57,50 @@
                             </li>
                         </ul>
                     </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Your Account
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li>
-                                <a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="Login">Login</a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="CreateAccount">Create Account</a>
-                            </li>
-                            <li><hr class="dropdown-divider"/></li>
-                            <li>
-                                <a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="ViewAccount">View Account</a>
-                            </li>
-                        </ul>
-                    </li>
+                </ul>
+                <ul class="navbar-nav ms-auto align-items-center">
+                    @using WebApplication1.Common
+                    @{
+                        var loggedInUser = Context.Request.Cookies.GetLoggedInUser();
+                    }
+                    @if (loggedInUser == null)
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Login">
+                                <i class="fas fa-sign-in-alt"></i> Login
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="CreateAccount">
+                                <i class="fas fa-user-plus"></i> Register
+                            </a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-user-circle fa-lg me-1"></i>
+                                <span class="fw-semibold">@loggedInUser.FirstName @loggedInUser.LastName</span>
+                                <span class="badge bg-secondary ms-2" style="font-size:0.8em;">@loggedInUser.UserId.Substring(0, 8)</span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                                <li>
+                                    <a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="ViewAccount">
+                                        <i class="fas fa-id-card"></i> Account Details
+                                    </a>
+                                </li>
+                                <li><hr class="dropdown-divider" /></li>
+                                <li>
+                                    <form method="post" asp-area="" asp-controller="Account" asp-action="Logout" class="d-inline">
+                                        <button type="submit" class="dropdown-item">
+                                            <i class="fas fa-sign-out-alt"></i> Logout
+                                        </button>
+                                    </form>
+                                </li>
+                            </ul>
+                        </li>
+                    }
                 </ul>
             </div>
         </div>
