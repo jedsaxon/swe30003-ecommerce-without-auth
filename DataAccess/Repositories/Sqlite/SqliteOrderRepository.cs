@@ -1,6 +1,4 @@
-using System.Data;
 using DataAccess.DTO;
-using Microsoft.Data.Sqlite;
 
 namespace DataAccess.Repositories.Sqlite;
 
@@ -74,7 +72,7 @@ public class SqliteOrderRepository : IOrderRepository
             FROM orders o
             LEFT JOIN order_items oi ON o.id = oi.order_id
             WHERE o.id = @OrderId";
-        command.Parameters.AddWithValue("@OrderId", orderId.ToString());
+        command.Parameters.AddWithValue("@OrderId", orderId.ToString().ToLowerInvariant());
 
         using var reader = await command.ExecuteReaderAsync();
         var orderItems = new List<OrderItem>();
@@ -107,8 +105,8 @@ public class SqliteOrderRepository : IOrderRepository
         command.CommandText = @"
             INSERT INTO orders (id, customer_id, street, city, country, post_code, payment_provider)
             VALUES (@OrderId, @CustomerId, @Street, @City, @Country, @PostCode, @PaymentProvider)";
-        command.Parameters.AddWithValue("@OrderId", orderId.ToString());
-        command.Parameters.AddWithValue("@CustomerId", order.CustomerId.ToString());
+        command.Parameters.AddWithValue("@OrderId", orderId.ToString().ToLowerInvariant());
+        command.Parameters.AddWithValue("@CustomerId", order.CustomerId.ToString().ToLowerInvariant());
         command.Parameters.AddWithValue("@Street", order.Street);
         command.Parameters.AddWithValue("@City", order.City);
         command.Parameters.AddWithValue("@Country", order.Country);
@@ -117,6 +115,7 @@ public class SqliteOrderRepository : IOrderRepository
         await command.ExecuteNonQueryAsync();
 
         var orderItems = new List<OrderItem>();
+        Console.WriteLine($"[DEBUG] Inserting {order.OrderItems.Count} order items for order {orderId}");
         foreach (var item in order.OrderItems)
         {
             command.Parameters.Clear();
@@ -124,9 +123,9 @@ public class SqliteOrderRepository : IOrderRepository
             command.CommandText = @"
                 INSERT INTO order_items (id, product_id, order_id, price_paid, name, short_description, quantity_ordered)
                 VALUES (@ItemId, @ProductId, @OrderId, @PricePaid, @Name, @ShortDescription, @QuantityOrdered)";
-            command.Parameters.AddWithValue("@ItemId", itemId.ToString());
-            command.Parameters.AddWithValue("@ProductId", item.ProductId.ToString());
-            command.Parameters.AddWithValue("@OrderId", orderId.ToString());
+            command.Parameters.AddWithValue("@ItemId", itemId.ToString().ToLowerInvariant());
+            command.Parameters.AddWithValue("@ProductId", item.ProductId.ToString().ToLowerInvariant());
+            command.Parameters.AddWithValue("@OrderId", orderId.ToString().ToLowerInvariant());
             command.Parameters.AddWithValue("@PricePaid", item.PricePaid);
             command.Parameters.AddWithValue("@Name", item.Name);
             command.Parameters.AddWithValue("@ShortDescription", item.ShortDescription);
@@ -153,7 +152,7 @@ public class SqliteOrderRepository : IOrderRepository
 
         // Delete existing order items
         command.CommandText = "DELETE FROM order_items WHERE order_id = @OrderId";
-        command.Parameters.AddWithValue("@OrderId", order.OrderId.ToString());
+        command.Parameters.AddWithValue("@OrderId", order.OrderId.ToString().ToLowerInvariant());
         await command.ExecuteNonQueryAsync();
 
         // Update order
@@ -162,20 +161,20 @@ public class SqliteOrderRepository : IOrderRepository
             UPDATE orders 
             SET customer_id = @CustomerId
             WHERE id = @OrderId";
-        command.Parameters.AddWithValue("@OrderId", order.OrderId.ToString());
-        command.Parameters.AddWithValue("@CustomerId", order.CustomerId.ToString());
+        command.Parameters.AddWithValue("@OrderId", order.OrderId.ToString().ToLowerInvariant());
+        command.Parameters.AddWithValue("@CustomerId", order.CustomerId.ToString().ToLowerInvariant());
         await command.ExecuteNonQueryAsync();
 
         // Insert new order items
-        foreach (var item in order.OrderItems)
+        foreach (var item in order.Items)
         {
             command.Parameters.Clear();
             command.CommandText = @"
                 INSERT INTO order_items (id, product_id, order_id, price_paid, name, short_description, quantity_ordered)
                 VALUES (@ItemId, @ProductId, @OrderId, @PricePaid, @Name, @ShortDescription, @QuantityOrdered)";
-            command.Parameters.AddWithValue("@ItemId", item.Id.ToString());
-            command.Parameters.AddWithValue("@ProductId", item.ProductId.ToString());
-            command.Parameters.AddWithValue("@OrderId", order.OrderId.ToString());
+            command.Parameters.AddWithValue("@ItemId", item.Id.ToString().ToLowerInvariant());
+            command.Parameters.AddWithValue("@ProductId", item.ProductId.ToString().ToLowerInvariant());
+            command.Parameters.AddWithValue("@OrderId", order.OrderId.ToString().ToLowerInvariant());
             command.Parameters.AddWithValue("@PricePaid", item.PricePaid);
             command.Parameters.AddWithValue("@Name", item.Name);
             command.Parameters.AddWithValue("@ShortDescription", item.ShortDescription);

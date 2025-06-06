@@ -83,12 +83,24 @@ public class OrdersController : Controller
             return View(order);
         }
 
+        // Re-fetch cart from cookie/session for POST
+        var cookiePost = GetCookie();
+        var foundProductsPost = await _productsService.GetAllProducts(true);
+        var idProductDictPost = foundProductsPost.Where(x => x.Id != null).ToDictionary(x => x.Id!.Value, x => x);
+        var cartProductsPost = idProductDictPost.Where(x => cookiePost.CartIdCountDict.ContainsKey(x.Key)).Select(x => new CartItemViewModel
+        {
+            ProductId = x.Key,
+            ProductName = x.Value.Name,
+            Count = cookiePost.CartIdCountDict[x.Key],
+            Price = x.Value.Price
+        }).ToList();
+
         // TODO: Get actual customer ID from authentication
         var customerId = Guid.Parse("ecf889e6-5ebd-48a0-860c-a15c56c0cf7f");
         var placeOrderDto = new PlaceOrderDTO
         {
             CustomerId = customerId,
-            Items = order.Items.Select(x => new NewOrderItemDto(
+            Items = cartProductsPost.Select(x => new NewOrderItemDto(
                 x.ProductId,
                 Guid.Empty, // Will be replaced in repo
                 x.ProductName,
@@ -102,6 +114,7 @@ public class OrdersController : Controller
             PostCode = order.OrderPostalCode,
             PaymentProvider = order.SelectedProvider.ToString()
         };
+        Console.WriteLine($"[DEBUG] Placing order with {placeOrderDto.Items.Count} items.");
         await _orderService.PlaceOrder(placeOrderDto);
         Response.Cookies.Delete("shopping_cart");
         return RedirectToAction(nameof(Success));

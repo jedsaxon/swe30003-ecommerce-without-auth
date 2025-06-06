@@ -1,3 +1,8 @@
 namespace DataAccess.DTO;
 
-public record NewInvoiceDTO(Guid OrderId, string Status, Guid CustomerId);
+public record NewInvoiceDTO(
+    Guid InvoiceId,
+    Guid OrderId,
+    string Status,
+    Guid CustomerId
+);

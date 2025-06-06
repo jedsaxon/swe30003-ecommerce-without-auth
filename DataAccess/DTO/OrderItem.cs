@@ -1,3 +1,5 @@
+using System;
+
 namespace DataAccess.DTO;
 
 public record OrderItem(
@@ -7,4 +9,5 @@ public record OrderItem(
     double PricePaid,
     string Name,
     string ShortDescription,
-    int QuantityOrdered);
+    int QuantityOrdered
+);
