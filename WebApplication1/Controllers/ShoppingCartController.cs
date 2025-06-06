@@ -20,19 +20,28 @@ public class ShoppingCartController(ProductsService productsService) : Controlle
         {
             return NotFound();
         }
+        if (product.Stock <= 0)
+        {
+            TempData["Error"] = "Cannot add to cart: Product is out of stock.";
+            return RedirectToAction("ViewShoppingCart");
+        }
 
         var cookie = GetCookie();
         var newDict = cookie.CartIdCountDict.ToDictionary();
+        int currentCount = newDict.ContainsKey(productId) ? newDict[productId] : 0;
+        if (currentCount + 1 > product.Stock)
+        {
+            TempData["Error"] = "Cannot add more: Not enough stock available.";
+            return RedirectToAction("ViewShoppingCart");
+        }
         if (!newDict.TryAdd(productId, 1))
         {
             newDict[productId] = newDict[productId] > 0 ? newDict[productId] + 1 : 1;
         }
-        
         Response.Cookies.Append(CookieName, JsonSerializer.Serialize(new CartCookie
         {
             CartIdCountDict = newDict
         }));
-
         return RedirectToAction("ViewShoppingCart");
     }
     
@@ -102,7 +111,8 @@ public class ShoppingCartController(ProductsService productsService) : Controlle
             ProductId = x.Key,
             ProductName = x.Value.Name,
             Count = cookie.CartIdCountDict[x.Key],
-            Price = x.Value.Price
+            Price = x.Value.Price,
+            Stock = x.Value.Stock
         }).ToHashSet();
         var viewModel = new ViewShoppingCartViewModel
         {

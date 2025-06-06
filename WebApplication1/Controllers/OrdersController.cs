@@ -95,6 +95,23 @@ public class OrdersController : Controller
             Price = x.Value.Price
         }).ToList();
 
+        // Check stock before placing order
+        foreach (var item in cartProductsPost)
+        {
+            var product = await _productsService.FindProductById(item.ProductId);
+            if (product == null || product.Stock < item.Count)
+            {
+                ModelState.AddModelError("", $"Insufficient stock for product: {item.ProductName}");
+                // Recalculate totals for the view
+                order.Items = cartProductsPost;
+                order.Subtotal = cartProductsPost.Sum(x => x.Price * x.Count);
+                order.ShippingCost = _shippingService.CalculateShippingCost(order.Subtotal, cartProductsPost.Sum(x => x.Count));
+                order.Total = order.Subtotal + order.ShippingCost;
+                order.PaymentProviders = Enum.GetValues<PaymentProvider>();
+                return View(order);
+            }
+        }
+
         // TODO: Get actual customer ID from authentication
         var customerId = Guid.Parse("ecf889e6-5ebd-48a0-860c-a15c56c0cf7f");
         var placeOrderDto = new PlaceOrderDTO
@@ -115,7 +132,21 @@ public class OrdersController : Controller
             PaymentProvider = order.SelectedProvider.ToString()
         };
         Console.WriteLine($"[DEBUG] Placing order with {placeOrderDto.Items.Count} items.");
+
+        // Place the order
         await _orderService.PlaceOrder(placeOrderDto);
+
+        // Decrease stock for each product
+        foreach (var item in cartProductsPost)
+        {
+            var product = await _productsService.FindProductById(item.ProductId);
+            if (product != null)
+            {
+                product.SetStock(product.Stock - item.Count);
+                await _productsService.EditProduct(product.Id.Value, product.Name, product.ShortDescription, product.LongDescription, (double)product.Price, product.Listed, product.Stock);
+            }
+        }
+
         Response.Cookies.Delete("shopping_cart");
         return RedirectToAction(nameof(Success));
     }

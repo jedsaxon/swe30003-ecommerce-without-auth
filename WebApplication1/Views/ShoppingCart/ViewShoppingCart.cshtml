@@ -3,6 +3,7 @@
 @{
     ViewBag.Title = "Shopping Cart";
     Layout = "_Layout";
+    var productDict = Model.Items.ToDictionary(i => i.ProductId, i => i);
 }
 
 <div class="mb-3">
@@ -12,11 +13,12 @@
 <div class="row row-cols-2 g-3 mb-3">
     @foreach (var item in Model.Items)
     {
+        var maxReached = item.Count >= item.Stock;
         <div class="col">
             <div class="card p-3">
                 <h5 class="card-title">@item.ProductName</h5>
                 <p class="card-text">
-                    Quantity: @item.Count
+                    Quantity: @item.Count <span class="text-muted">(Stock: @item.Stock)</span>
                 </p>
                 <div class="d-flex align-items-center">
                     <!-- add button -->
@@ -24,8 +26,9 @@
                        asp-action="Add"
                        asp-route-productId="@item.ProductId"
                        class="btn btn-sm btn-outline-primary me-2"
-                       title="Increase Quantity">
-                        + 
+                       title="@(item.Count >= item.Stock ? $"No more stock available (Stock: {item.Stock})" : "Increase Quantity")"
+                       disabled="@(item.Count >= item.Stock ? "disabled" : null)">
+                        +
                     </a>
 
                     <!-- delete button -->

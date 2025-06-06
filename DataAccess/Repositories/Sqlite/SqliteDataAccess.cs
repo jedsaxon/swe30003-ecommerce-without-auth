@@ -29,7 +29,8 @@ public class SqliteDataAccess : IAsyncDisposable, IDisposable
             short_description varchar(256) not null,
             long_description text not null,
             price double not null,
-            listed bool not null
+            listed bool not null,
+            stock int not null default 0
         );
         """,
         """
@@ -88,6 +89,45 @@ public class SqliteDataAccess : IAsyncDisposable, IDisposable
         foreach (var query in Tables)
         {
             command.CommandText = query;
+            await command.ExecuteNonQueryAsync();
+        }
+        // Migration: add stock column if missing
+        command.CommandText = "PRAGMA table_info(products);";
+        using (var reader = await command.ExecuteReaderAsync())
+        {
+            bool hasStock = false;
+            while (await reader.ReadAsync())
+            {
+                if (reader.GetString(1) == "stock")
+                {
+                    hasStock = true;
+                    break;
+                }
+            }
+            reader.Close();
+            if (!hasStock)
+            {
+                command.CommandText = "ALTER TABLE products ADD COLUMN stock int not null default 0;";
+                await command.ExecuteNonQueryAsync();
+            }
+        }
+    }
+
+    public async Task DropAllTablesAsync()
+    {
+        var command = await CreateCommand();
+        // Drop tables in reverse dependency order
+        string[] dropStatements = new[]
+        {
+            "drop table if exists order_items;",
+            "drop table if exists orders;",
+            "drop table if exists invoices;",
+            "drop table if exists products;",
+            "drop table if exists users;"
+        };
+        foreach (var stmt in dropStatements)
+        {
+            command.CommandText = stmt;
             await command.ExecuteNonQueryAsync();
         }
     }

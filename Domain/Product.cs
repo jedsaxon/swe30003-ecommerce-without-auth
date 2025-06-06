@@ -15,9 +15,10 @@ public class Product
     public string LongDescription { get; private set; }
     public decimal Price { get; private set; }
     public bool Listed { get; private set; }
+    public int Stock { get; private set; }
 
     /// <exception cref="DomainException">If there were any business rules violated</exception>
-    private Product(Guid? id, string name, string shortDescription, string longDescription, decimal price, bool listed)
+    private Product(Guid? id, string name, string shortDescription, string longDescription, decimal price, bool listed, int stock)
     {
         var errors = new Dictionary<string, string>();
 
@@ -28,6 +29,7 @@ public class Product
         if (longDescription.Length > LONG_DESC_MAX_LENGTH)
             errors[nameof(LongDescription)] = $"Description canont be greater than {LONG_DESC_MAX_LENGTH} characters";
         if (price <= 0) errors[nameof(Price)] = $"Price cannot be lower than $0.00";
+        if (stock < 0) errors[nameof(Stock)] = "Stock cannot be negative";
 
         if (errors.Count > 0) throw new DomainException(errors);
 
@@ -37,6 +39,7 @@ public class Product
         LongDescription = longDescription;
         Price = price;
         Listed = listed;
+        Stock = stock;
     }
 
     /// <summary>
@@ -45,9 +48,9 @@ public class Product
     /// </summary>
     /// <returns>The newly created product with no identity</returns>
     /// <exception cref="DomainException">If there were any business rules violated</exception>
-    public static Product NewProduct(string name, string shortDescription, string longDescription, decimal price, bool listed)
+    public static Product NewProduct(string name, string shortDescription, string longDescription, decimal price, bool listed, int stock)
     {
-        return new Product(null, name, shortDescription, longDescription, price, listed);
+        return new Product(null, name, shortDescription, longDescription, price, listed, stock);
     }
 
     /// <summary>
@@ -61,9 +64,10 @@ public class Product
         string shortDescription,
         string longDescription,
         decimal price,
-        bool listed)
+        bool listed,
+        int stock)
     {
-        return new Product(id, name, shortDescription, longDescription, price, listed);
+        return new Product(id, name, shortDescription, longDescription, price, listed, stock);
     }
 
     /// <summary>
@@ -116,5 +120,11 @@ public class Product
     public void Unlist()
     {
         Listed = false;
+    }
+
+    public void SetStock(int stock)
+    {
+        if (stock < 0) throw new ArgumentOutOfRangeException(nameof(stock), "Stock cannot be negative");
+        Stock = stock;
     }
 }

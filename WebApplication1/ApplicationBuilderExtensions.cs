@@ -16,6 +16,12 @@ public static class ApplicationBuilderExtensions
         var db = scope.ServiceProvider.GetService<SqliteDataAccess>();
         if (db is null) throw new NullReferenceException("You did not provide the SqliteDataAccess service");
 
+        var preserveDb = Environment.GetEnvironmentVariable("PRESERVE_DB");
+        if (string.IsNullOrEmpty(preserveDb) || preserveDb != "1")
+        {
+            await db.DropAllTablesAsync();
+        }
+
         var products = scope.ServiceProvider.GetService<IProductRepository>();
         if (products is null) throw new NullReferenceException("You did not provide a IProductRepository service");
 

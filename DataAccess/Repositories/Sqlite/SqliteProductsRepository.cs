@@ -10,7 +10,7 @@ public class SqliteProductsRepository(SqliteDataAccess dataAccess, ILogger<Sqlit
         var command = await dataAccess.CreateCommand();
 
         var commandText = """
-                          select id, name, short_description, long_description, price, listed
+                          select id, name, short_description, long_description, price, listed, stock
                           from products
                           """;
         // If we don't include unlisted products, then only return those that are listed
@@ -29,7 +29,8 @@ public class SqliteProductsRepository(SqliteDataAccess dataAccess, ILogger<Sqlit
                 reader.GetString(2),
                 reader.GetString(3),
                 reader.GetDouble(4),
-                reader.GetBoolean(5)
+                reader.GetBoolean(5),
+                reader.GetInt32(6)
             ));
         }
 
@@ -40,7 +41,7 @@ public class SqliteProductsRepository(SqliteDataAccess dataAccess, ILogger<Sqlit
     {
         var command = await dataAccess.CreateCommand();
         command.CommandText = """
-                              select id, name, short_description, long_description, price, listed
+                              select id, name, short_description, long_description, price, listed, stock
                               from products
                               where id = :id
                               """;
@@ -55,15 +56,16 @@ public class SqliteProductsRepository(SqliteDataAccess dataAccess, ILogger<Sqlit
             reader.GetString(2),
             reader.GetString(3),
             reader.GetDouble(4),
-            reader.GetBoolean(5));
+            reader.GetBoolean(5),
+            reader.GetInt32(6));
     }
 
     public async Task<ProductDTO?> InsertProduct(NewProductDTO newProduct)
     {
         var command = await dataAccess.CreateCommand();
         command.CommandText = """
-                              insert into products (id, name, short_description, long_description, price, listed)
-                              values (:id, :name, :short_description, :long_description, :price, :listed);
+                              insert into products (id, name, short_description, long_description, price, listed, stock)
+                              values (:id, :name, :short_description, :long_description, :price, :listed, :stock);
                               """;
 
         var newId = Guid.NewGuid();
@@ -74,6 +76,7 @@ public class SqliteProductsRepository(SqliteDataAccess dataAccess, ILogger<Sqlit
         command.Parameters.AddWithValue(":long_description", newProduct.LongDescription);
         command.Parameters.AddWithValue(":price", newProduct.Price);
         command.Parameters.AddWithValue(":listed", newProduct.Listed);
+        command.Parameters.AddWithValue(":stock", newProduct.Stock);
 
         if (await command.ExecuteNonQueryAsync() == 0)
             return null;
@@ -84,7 +87,8 @@ public class SqliteProductsRepository(SqliteDataAccess dataAccess, ILogger<Sqlit
             newProduct.ShortDescription,
             newProduct.LongDescription,
             newProduct.Price,
-            newProduct.Listed
+            newProduct.Listed,
+            newProduct.Stock
         );
     }
 
@@ -93,7 +97,7 @@ public class SqliteProductsRepository(SqliteDataAccess dataAccess, ILogger<Sqlit
         var command = await dataAccess.CreateCommand();
         command.CommandText = """
                               update products
-                              set name=:name, short_description=:short_description, long_description=:long_description, price=:price, listed=:listed
+                              set name=:name, short_description=:short_description, long_description=:long_description, price=:price, listed=:listed, stock=:stock
                               where id=:id
                               """;
         command.Parameters.AddWithValue(":id", toUpdate.ProductId.ToString());
@@ -102,6 +106,7 @@ public class SqliteProductsRepository(SqliteDataAccess dataAccess, ILogger<Sqlit
         command.Parameters.AddWithValue(":price", toUpdate.Price);
         command.Parameters.AddWithValue(":name", toUpdate.Name);
         command.Parameters.AddWithValue(":listed", toUpdate.Listed);
+        command.Parameters.AddWithValue(":stock", toUpdate.Stock);
 
         return await command.ExecuteNonQueryAsync() == 1;
     }

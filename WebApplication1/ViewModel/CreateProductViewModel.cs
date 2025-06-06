@@ -13,4 +13,6 @@ public class CreateProductViewModel
     [Required] [Range(0, double.MaxValue)] public double Price { get; set; } = 0;
 
     [Required] public bool Listed { get; set; } = true;
+
+    [Required] [Range(0, int.MaxValue)] public int Stock { get; set; } = 0;
 }
