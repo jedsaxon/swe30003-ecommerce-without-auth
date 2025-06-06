@@ -31,6 +31,11 @@ public class OrdersController : Controller
     [HttpGet]
     public async Task<IActionResult> PlaceOrder()
     {
+        var loggedInUser = Request.Cookies.GetLoggedInUser();
+        if (loggedInUser == null)
+        {
+            return RedirectToAction("Login", "Account");
+        }
         var cookie = GetCookie();
         var foundProducts = await _productsService.GetAllProducts(true);
         var idProductDict = foundProducts.Where(x => x.Id != null).ToDictionary(x => x.Id!.Value, x => x);
@@ -62,6 +67,11 @@ public class OrdersController : Controller
     [HttpPost]
     public async Task<IActionResult> PlaceOrder([FromForm] PlaceOrderViewModel order)
     {
+        var loggedInUser = Request.Cookies.GetLoggedInUser();
+        if (loggedInUser == null)
+        {
+            return RedirectToAction("Login", "Account");
+        }
         if (!ModelState.IsValid)
         {
             // Recalculate totals for the view
