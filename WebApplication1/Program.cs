@@ -20,6 +20,7 @@ builder.Services.AddTransient<IOrderRepository, SqliteOrderRepository>();
 builder.Services.AddTransient<ProductsService>();
 builder.Services.AddTransient<UserService>();
 builder.Services.AddTransient<ShippingService>();
+builder.Services.AddScoped<OrderService>();
 
 var app = builder.Build();
 

@@ -14,15 +14,18 @@ public class OrdersController : Controller
     private readonly ProductsService _productsService;
     private readonly IOrderRepository _orderRepository;
     private readonly ShippingService _shippingService;
+    private readonly OrderService _orderService;
 
     public OrdersController(
         ProductsService productsService,
         IOrderRepository orderRepository,
-        ShippingService shippingService)
+        ShippingService shippingService,
+        OrderService orderService)
     {
         _productsService = productsService;
         _orderRepository = orderRepository;
         _shippingService = shippingService;
+        _orderService = orderService;
     }
 
     [HttpGet]
@@ -59,20 +62,19 @@ public class OrdersController : Controller
     [HttpPost]
     public async Task<IActionResult> PlaceOrder([FromForm] PlaceOrderViewModel order)
     {
-        var cookie = GetCookie();
-        var foundProducts = await _productsService.GetAllProducts(true);
-        var idProductDict = foundProducts.Where(x => x.Id != null).ToDictionary(x => x.Id!.Value, x => x);
-        var cartProducts = idProductDict.Where(x => cookie.CartIdCountDict.ContainsKey(x.Key)).Select(x => new CartItemViewModel
-        {
-            ProductId = x.Key,
-            ProductName = x.Value.Name,
-            Count = cookie.CartIdCountDict[x.Key],
-            Price = x.Value.Price
-        }).ToList();
-
         if (!ModelState.IsValid)
         {
             // Recalculate totals for the view
+            var cookie = GetCookie();
+            var foundProducts = await _productsService.GetAllProducts(true);
+            var idProductDict = foundProducts.Where(x => x.Id != null).ToDictionary(x => x.Id!.Value, x => x);
+            var cartProducts = idProductDict.Where(x => cookie.CartIdCountDict.ContainsKey(x.Key)).Select(x => new CartItemViewModel
+            {
+                ProductId = x.Key,
+                ProductName = x.Value.Name,
+                Count = cookie.CartIdCountDict[x.Key],
+                Price = x.Value.Price
+            }).ToList();
             order.Items = cartProducts;
             order.Subtotal = cartProducts.Sum(x => x.Price * x.Count);
             order.ShippingCost = _shippingService.CalculateShippingCost(order.Subtotal, cartProducts.Sum(x => x.Count));
@@ -81,34 +83,27 @@ public class OrdersController : Controller
             return View(order);
         }
 
-        // Create order items from cart products
-        var orderItems = cartProducts.Select(x => new NewOrderItemDto(
-            x.ProductId,
-            Guid.NewGuid(), // This will be replaced with the actual order ID
-            x.ProductName,
-            idProductDict[x.ProductId].ShortDescription,
-            x.Count,
-            (double)x.Price // Convert decimal to double
-        )).ToList();
-
         // TODO: Get actual customer ID from authentication
         var customerId = Guid.Parse("ecf889e6-5ebd-48a0-860c-a15c56c0cf7f");
-
-        // Create and save the order
-        var newOrder = new NewOrderDTO(
-            customerId,
-            orderItems,
-            order.OrderStreet,
-            order.OrderCity,
-            order.OrderCountry,
-            order.OrderPostalCode,
-            order.SelectedProvider.ToString()
-        );
-        await _orderRepository.AddOrder(newOrder);
-
-        // Clear the cart
+        var placeOrderDto = new PlaceOrderDTO
+        {
+            CustomerId = customerId,
+            Items = order.Items.Select(x => new NewOrderItemDto(
+                x.ProductId,
+                Guid.Empty, // Will be replaced in repo
+                x.ProductName,
+                string.Empty, // ShortDescription can be filled in service
+                x.Count,
+                (double)x.Price
+            )).ToList(),
+            Street = order.OrderStreet,
+            City = order.OrderCity,
+            Country = order.OrderCountry,
+            PostCode = order.OrderPostalCode,
+            PaymentProvider = order.SelectedProvider.ToString()
+        };
+        await _orderService.PlaceOrder(placeOrderDto);
         Response.Cookies.Delete("shopping_cart");
-
         return RedirectToAction(nameof(Success));
     }
 
