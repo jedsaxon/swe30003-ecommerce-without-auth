@@ -17,11 +17,19 @@
                     <h5 class="card-title">@(p.Listed ? "" : "[UNLISTED] ") @p.Name</h5>
                     <h6 class="card-subtitle mb-2 @(p.Listed ? "text-muted " : "")">$@p.Price</h6>
                     <p class="card-text">@p.ShortDescription</p>
+                    <p class="card-text"><strong>Stock:</strong> @p.Stock</p>
                     @if (p.Listed)
                     {
                         <div class="btn-group w-100 mb-3">
                             <a asp-action="ViewDetails" asp-route-productId="@p.Id" class="btn btn-outline-primary">View Details</a>
-                            <a asp-controller="ShoppingCart" asp-action="Add" asp-route-productId="@p.Id" class="btn btn-outline-secondary">Add To Cart</a>
+                            @if (p.Stock > 0)
+                            {
+                                <a asp-controller="ShoppingCart" asp-action="Add" asp-route-productId="@p.Id" class="btn btn-outline-secondary">Add To Cart</a>
+                            }
+                            else
+                            {
+                                <button class="btn btn-outline-secondary" disabled>Out of Stock</button>
+                            }
                         </div>
                         <a class="card-link text-primary" asp-action="EditProduct" asp-route-productId="@p.Id">Edit</a>
                     }

@@ -62,7 +62,8 @@ public class ProductsController(ProductsService products) : Controller
             newProduct.ShortDescription,
             newProduct.ShortDescription,
             newProduct.Price,
-            newProduct.Listed);
+            newProduct.Listed,
+            newProduct.Stock);
 
         return RedirectToAction(nameof(GetAllProducts));
     }
@@ -89,7 +90,8 @@ public class ProductsController(ProductsService products) : Controller
             ShortDescription = foundProduct.ShortDescription,
             LongDescription = foundProduct.LongDescription,
             Price = foundProduct.Price,
-            Listed = foundProduct.Listed
+            Listed = foundProduct.Listed,
+            Stock = foundProduct.Stock
         };
         return View(editableProduct);
     }
@@ -115,7 +117,7 @@ public class ProductsController(ProductsService products) : Controller
         try
         {
             var result = await products.EditProduct(editProduct.ProductId, editProduct.Name, editProduct.ShortDescription,
-                editProduct.LongDescription, (double)editProduct.Price, editProduct.Listed);
+                editProduct.LongDescription, (double)editProduct.Price, editProduct.Listed, editProduct.Stock);
 
             if (!result)
                 ViewData["Error"] = "Unable to save results";
