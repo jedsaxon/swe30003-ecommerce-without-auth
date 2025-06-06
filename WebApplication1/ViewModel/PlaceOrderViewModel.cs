@@ -15,6 +15,15 @@ public class PlaceOrderViewModel
 
     [BindProperty]
     public PaymentProvider SelectedProvider { get; set; }
+
+    [DisplayName("Subtotal")]
+    public decimal Subtotal { get; set; }
+
+    [DisplayName("Shipping Cost")]
+    public decimal ShippingCost { get; set; }
+
+    [DisplayName("Total")]
+    public decimal Total { get; set; }
 }
 
 public enum PaymentProvider
