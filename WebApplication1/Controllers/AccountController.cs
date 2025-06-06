@@ -114,4 +114,13 @@ public class AccountController(UserService userService) : Controller
         
         return View();
     }
+
+    [HttpPost]
+    [Route("logout")]
+    [ValidateAntiForgeryToken]
+    public IActionResult Logout()
+    {
+        Response.Cookies.Delete("LoggedInUser");
+        return RedirectToAction("Index", "Home");
+    }
 }

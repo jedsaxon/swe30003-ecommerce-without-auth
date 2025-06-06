@@ -1,8 +1,124 @@
 @{
-    ViewData["Title"] = "Home page";
+    ViewData["Title"] = "Home";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<!-- Hero Section -->
+<div class="hero-section position-relative text-white mb-5">
+    <div class="hero-image" style="background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1498049794561-7780e7231661?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80'); background-size: cover; background-position: center; height: 500px;">
+        <div class="container h-100">
+            <div class="row h-100 align-items-center">
+                <div class="col-md-6">
+                    <h1 class="display-4 fw-bold">Welcome to AWElectronics</h1>
+                    <p class="lead">Your trusted source for premium electronics and exceptional service.</p>
+                    <a href="/products" class="btn btn-warning btn-lg">Shop Now</a>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
+<!-- Features Section -->
+<div class="container mb-5">
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body text-center">
+                    <i class="fas fa-truck fa-3x text-warning mb-3"></i>
+                    <h3 class="card-title h5">Fast Shipping</h3>
+                    <p class="card-text">Free shipping on orders over $100. Quick delivery to your doorstep.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body text-center">
+                    <i class="fas fa-shield-alt fa-3x text-warning mb-3"></i>
+                    <h3 class="card-title h5">Secure Shopping</h3>
+                    <p class="card-text">Your security is our priority. Shop with confidence.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body text-center">
+                    <i class="fas fa-headset fa-3x text-warning mb-3"></i>
+                    <h3 class="card-title h5">24/7 Support</h3>
+                    <p class="card-text">Our customer service team is always here to help you.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Categories Section -->
+<div class="container mb-5">
+    <h2 class="text-center mb-4">Shop by Category</h2>
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card category-card border-0 shadow-sm">
+                <img src="https://images.unsplash.com/photo-1593642632823-8f785ba67e45?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" class="card-img-top" alt="Computers">
+                <div class="card-body text-center">
+                    <h3 class="card-title h5">Computers</h3>
+                    <a href="/products" class="btn btn-outline-warning">View All</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card category-card border-0 shadow-sm">
+                <img src="https://images.unsplash.com/photo-1572569511254-d8f925fe2cbb?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" class="card-img-top" alt="Smartphones">
+                <div class="card-body text-center">
+                    <h3 class="card-title h5">Smartphones</h3>
+                    <a href="/products" class="btn btn-outline-warning">View All</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card category-card border-0 shadow-sm">
+                <img src="https://images.unsplash.com/photo-1546868871-7041f2a55e12?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" class="card-img-top" alt="Accessories">
+                <div class="card-body text-center">
+                    <h3 class="card-title h5">Accessories</h3>
+                    <a href="/products" class="btn btn-outline-warning">View All</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Newsletter Section -->
+<div class="bg-light py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8 text-center">
+                <h2 class="mb-4">Stay Updated</h2>
+                <p class="mb-4">Subscribe to our newsletter for the latest products and exclusive offers.</p>
+                <form class="row g-3 justify-content-center">
+                    <div class="col-md-8">
+                        <input type="email" class="form-control form-control-lg" placeholder="Enter your email">
+                    </div>
+                    <div class="col-md-4">
+                        <button type="submit" class="btn btn-warning btn-lg w-100">Subscribe</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .hero-section {
+        margin-top: -1.5rem;
+    }
+    
+    .category-card {
+        transition: transform 0.3s ease;
+    }
+    
+    .category-card:hover {
+        transform: translateY(-5px);
+    }
+    
+    .category-card img {
+        height: 200px;
+        object-fit: cover;
+    }
+</style>
